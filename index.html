@@ -4,6 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pausa Breve - Autorregulación</title>
+<!--
+### Cuando necesites tranquilidad
+Que nunca te falten caminos  
+cuando la vida parezca difícil,  
+ni motivos para seguir sonriendo  
+cuando el día venga gris.
+
+Que encuentres calma  
+en las cosas pequeñas:  
+una conversación,  
+una canción,  
+un café,  
+un abrazo que llegue justo a tiempo.
+
+Y si alguna vez el mundo pesa demasiado,  
+recuerda que no tienes que llevarlo todo sola.
+
+Hay personas que aparecen en la vida  
+sin hacer ruido,  
+y terminan dejando una huella bonita.
+
+Tú eres una de ellas.
+
+Por eso, cuando necesites tranquilidad,  
+respira,  
+mira hacia adelante  
+y recuerda que, incluso a la distancia,  
+hay alguien que se alegra  
+de saber que estás bien.
+
+Porque quizá la felicidad venga y se vaya,  
+pero la tranquilidad  
+es ese pequeño lugar  
+al que siempre podemos volver.
+# Metadatos
+Versión: 1.0
+Diseñado: por Carlos Gonzalez
+Idea original: Lorena Molano
+Año: 2026
+-->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090d16">
     <style>
@@ -691,5 +731,54 @@
       });
     }
     </script>
+<!--
+PROYECTO: Pausa Breve - Autorregulación
+CREADO PARA: Lorena
+FECHA: Septiembre 2026
+PROPÓSITO: Aplicación web progresiva (PWA) para ejercicios de autorregulación emocional en 1 clic.
+
+DISEÑO UX - PASOS CLAVE:
+1. Pantalla 1 (Home): Los 4 botones de entrada corporal ("pecho", "rabia", "exhausted", "nudo") deben estar ubicados al alcance del pulgar en la parte inferior.
+   - Se logró usando .symptom-grid con margin-top: auto dentro de un flex column, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
+   - Los iconos fueron redesignados de emojis genéricos a SVGs estilo Lucide de trazo consistente con el tema oscuro, con fondo translúcido y color verde neón #10b981.
+
+2. Pantalla 2 (Ejercicio): La tarjeta con la instrucción del ejercicio debe ubicarse en la parte superior antes del temporizador.
+   - Estructura: .instruction-box (arriba) > .timer-display (centro) > .action-btn-group (abajo con margin-top: auto).
+   - El temporizador inicia en estado ESTÁTICO (círculo completo, 01:00) y solo comienza a descontar al hacer clic en "🟢 Comenzar ejercicio".
+   - El JS controla isRunning y setCircleProgress(1) inicial.
+
+3. Pantalla 3 (Cierre): Al finalizar el tiempo u omitir, debe mostrar la tarjeta con el mensaje de paz espiritual y ofrecer únicamente dos botones al final: "Repetir ejercicio" y "Volver al inicio".
+   - Se muestra .closing-card con el mensaje y dos botones .btn-main y .nav-btn-secondary.
+   - Solo aparecen estos dos botones, sin adicionales.
+
+DISEÑO VISUAL (estilo AI Studio):
+- Fondos: #090d16 (general), #0f172a (tarjetas), #131c2e (botones síntomas).
+- Bordes: 1px solid #1e293b, border-radius: 18px.
+- Colores neón: #10b981 para texto y bordes en etiquetas destacadas.
+- Texto: #ffffff, font-weight: 700, sans-serif.
+- Íconos: SVGs estilo Lucide con stroke-currentColor, fijados en cuadrados con fondo rgba(16,185,129,0.1).
+- Responsive: @media (max-width: 480px) y (max-width: 360px) reducen tamaños de fuente y timer.
+- PWA: manifest.json y service worker (sw.js) para instalación en celular y carga offline.
+
+Estructura del Código:
+- HTML: 3 secciones <section class="screen"> (home, exercise, closing) con display none/active.
+- CSS: Variables :root, resets, estilos por pantalla, media queries responsive.
+- JavaScript: objeto exercises con datos por cada tipo, variables de estado (currentKey, totalSeconds, remainingSeconds, isRunning, timerInterval).
+  - showScreen(screenId) para cambiar de pantalla.
+  - selectSymptom(key) para cargar datos en la pantalla de ejercicio.
+  - startTimer() iniciado solo por clic, usa setInterval countdown, setCircleProgress(fraction) para el círculo SVG.
+  - finishExercise() al llegar a 0 o al omitir, cambia a pantalla de cierre.
+  - repeatExercise() y resetToHome() para navegación.
+
+TODO PARA LORéNA:
+- Si quiere añadir más ejercicios, añadir en el objeto exercises en el <script>.
+- Para cambiar colores, modificar las variables :root.
+- Para más pantallas o funcionalidades, mantener la misma estructura de cambio de pantalla con showScreen().
+
+CONCLUSIÓN:
+Esta app fue creada con dedicación para ayudar a Lorena a tomar un momento de paz y autorregulación en su día a día. Cada detalle, desde los iconos hasta la lógica del temporizador, fue pensado para que sea intuitivo, accesible y visualmente agradable en modo oscuro. Espero que le sea de mucha utilidad y que Dios la bendiga abundantemente.
+-->
+    <!--
+    -->
 </div></body>
 </html>
