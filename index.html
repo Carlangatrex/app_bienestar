@@ -72,19 +72,22 @@ Año: 2026
         }
 
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            min-height: 100dvh;
             background-color: #0b0f19;
+            padding-top: env(safe-area-inset-top);
         }
 
         .app-container {
+            position: relative;
             width: 100%;
-            max-width: 414px;
+            max-width: 420px;
             min-height: 100vh;
+            min-height: 100dvh;
             margin: 0 auto;
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         header {
@@ -104,8 +107,7 @@ Año: 2026
             display: none;
             flex-direction: column;
             align-items: center;
-            flex-grow: 1;
-            min-height: 0;
+            gap: 16px;
             width: 100%;
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -122,7 +124,7 @@ Año: 2026
         /* Screen 1: Home / Entry points */
         .home-title {
             text-align: center;
-            margin-top: 8px;
+            margin-top: 24px;
         }
 
         .home-title h2 {
@@ -143,8 +145,6 @@ Año: 2026
             gap: 12px;
             width: 100%;
             max-width: 400px;
-            margin-top: auto;
-            margin-bottom: 20px;
         }
 
         .symptom-btn {
@@ -199,7 +199,6 @@ Año: 2026
             flex-direction: column;
             align-items: center;
             gap: 24px;
-            margin: auto 0;
         }
 
         .instruction-box {
@@ -333,10 +332,10 @@ Año: 2026
         }
 
         @media (max-width: 480px) {
-            body { padding: 8px 14px 18px; }
+            body { padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: 18px; }
             header h1 { font-size: 1.1rem; }
             header { padding-top: 4px; }
-            .home-title { margin-top: 8px; }
+            .home-title { margin-top: 24px; }
             .home-title h2 { font-size: 1.35rem; margin-bottom: 6px; }
             .home-title p { font-size: 0.9rem; }
             .symptom-btn { font-size: 1rem; padding: 14px 16px; min-height: 58px; gap: 12px; }
@@ -365,8 +364,8 @@ Año: 2026
         }
 
         @media (max-height: 700px) {
-            body { padding-top: 4px; padding-bottom: 8px; }
-            .home-title { margin-top: 4px; }
+            body { padding-top: calc(env(safe-area-inset-top) + 4px); padding-bottom: 8px; }
+            .home-title { margin-top: 16px; }
             .home-title h2 { font-size: 1.2rem; margin-bottom: 4px; }
             .symptom-btn { min-height: 52px; padding: 10px 14px; }
             .symptom-grid { gap: 8px; }
@@ -388,7 +387,6 @@ Año: 2026
             flex-direction: column;
             align-items: center;
             gap: 20px;
-            margin: auto 0;
             text-align: center;
         }
 
@@ -475,6 +473,10 @@ Año: 2026
     </style>
 </head>
 <body><div class="app-container">
+    <button id="audioBtn" aria-label="Control de audio" style="position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: none; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 20px; cursor: pointer;">🔊</button>
+    <audio id="bg-music" preload="metadata" loop muted onerror="alert('No se pudo cargar el archivo de audio. Coloca tu archivo MP3 de música zen en la carpeta y actualiza la ruta en el código src="tu_archivo_relajante.mp3");'>
+        <source src="tu_archivo_relajante.mp3" type="audio/mpeg">
+    </audio>
 
     <header>
         <h1>Pausa Breve</h1>
@@ -487,7 +489,7 @@ Año: 2026
             <p>Selecciona una opción para empezar</p>
         </div>
 
-        <div class="symptom-grid" style="margin-top: auto;">
+        <div class="symptom-grid">
             <button class="symptom-btn" data-accent="pecho" onclick="selectSymptom('pecho')">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -530,7 +532,7 @@ Año: 2026
 
     <!-- SCREEN 2: PREPARACIÓN Y EJECUCIÓN (TEMPORIZADOR MANUAL) -->
     <section id="screen-exercise" class="screen">
-        <div class="exercise-container" style="width: 100%; max-width: 400px; flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-start;">
+        <div class="exercise-container">
             <div class="instruction-box">
                 <span id="exercise-name" class="exercise-tag">Suspiro Cíclico</span>
                 <p id="exercise-instruction" class="instruction-text">
@@ -547,7 +549,7 @@ Año: 2026
             </div>
         </div>
 
-        <div class="action-btn-group" style="margin-top: auto;">
+        <div class="action-btn-group">
             <button id="btn-start" class="btn-main" onclick="startTimer()">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -563,7 +565,7 @@ Año: 2026
 
     <!-- SCREEN 3: CIERRE ESPIRITUAL -->
     <section id="screen-closing" class="screen">
-        <div class="closing-container" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center;">
+        <div class="closing-container">
             <div class="closing-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M12.67 19a2 2 0 0 0 1.416-.588l6.154-6.172a6 6 0 0 0-8.49-8.49L5.586 9.914A2 2 0 0 0 5 11.328V18a1 1 0 0 0 1 1z"/>
@@ -579,7 +581,7 @@ Año: 2026
             </div>
         </div>
 
-        <div class="action-btn-group" style="margin-top: auto;">
+        <div class="action-btn-group">
             <button class="btn-main" style="background-color: var(--primary); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);" onclick="repeatExercise()">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -688,6 +690,7 @@ Año: 2026
         function startTimer() {
             if (isRunning) return;
             isRunning = true;
+            startMusic();
 
             const btnStart = document.getElementById('btn-start');
             btnStart.innerHTML = STOP_ICON + 'Omitir / Finalizar';
@@ -708,6 +711,7 @@ Año: 2026
         function finishExercise() {
             clearInterval(timerInterval);
             isRunning = false;
+            stopMusic();
             showScreen('screen-closing');
         }
 
@@ -721,6 +725,7 @@ Año: 2026
             clearInterval(timerInterval);
             isRunning = false;
             currentKey = null;
+            stopMusic();
             showScreen('screen-home');
         }
     if ('serviceWorker' in navigator) {
@@ -729,6 +734,43 @@ Año: 2026
           .then(() => console.log('PWA lista y Service Worker registrado.'))
           .catch((err) => console.log('Error al registrar Service Worker:', err));
       });
+    }
+// Audio control
+    const audioBtn = document.getElementById('audioBtn');
+    const bgMusic = document.getElementById('bg-music');
+    if (audioBtn && bgMusic) {
+        let isMuted = false;
+        audioBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            bgMusic.muted = isMuted;
+        });
+    }
+
+// Music: starts with the exercise timer, stops when it finishes
+    function startMusic() {
+        if (!bgMusic) return;
+        bgMusic.muted = false;
+        bgMusic.currentTime = 0;
+        bgMusic.play().catch(e => console.error('Error playing music:', e));
+    }
+
+    function stopMusic() {
+        if (!bgMusic || bgMusic.paused) return;
+        // Fade-out of 1.2s so the music closes softly with the exercise
+        const fadeSteps = 12;
+        const fadeMs = 100;
+        let step = 0;
+        const initialVolume = bgMusic.volume;
+        const fadeOut = setInterval(() => {
+            step++;
+            bgMusic.volume = Math.max(0, initialVolume * (1 - step / fadeSteps));
+            if (step >= fadeSteps) {
+                clearInterval(fadeOut);
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+                bgMusic.volume = initialVolume;
+            }
+        }, fadeMs);
     }
     </script>
 <!--
@@ -739,11 +781,11 @@ PROPÓSITO: Aplicación web progresiva (PWA) para ejercicios de autorregulación
 
 DISEÑO UX - PASOS CLAVE:
 1. Pantalla 1 (Home): Los 4 botones de entrada corporal ("pecho", "rabia", "exhausted", "nudo") deben estar ubicados al alcance del pulgar en la parte inferior.
-   - Se logró usando .symptom-grid con margin-top: auto dentro de un flex column, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
+   - Se logró agrupando cabecera + .symptom-grid en el mismo bloque (max-width 420px) centrado verticalmente con flexbox en .app-container, sin huecos intermedios, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
    - Los iconos fueron redesignados de emojis genéricos a SVGs estilo Lucide de trazo consistente con el tema oscuro, con fondo translúcido y color verde neón #10b981.
 
 2. Pantalla 2 (Ejercicio): La tarjeta con la instrucción del ejercicio debe ubicarse en la parte superior antes del temporizador.
-   - Estructura: .instruction-box (arriba) > .timer-display (centro) > .action-btn-group (abajo con margin-top: auto).
+   - Estructura: .instruction-box (arriba) > .timer-display (centro) > .action-btn-group, todo agrupado y centrado verticalmente en la pantalla (sin margin-top: auto ni flex-grow).
    - El temporizador inicia en estado ESTÁTICO (círculo completo, 01:00) y solo comienza a descontar al hacer clic en "🟢 Comenzar ejercicio".
    - El JS controla isRunning y setCircleProgress(1) inicial.
 
@@ -769,6 +811,7 @@ Estructura del Código:
   - startTimer() iniciado solo por clic, usa setInterval countdown, setCircleProgress(fraction) para el círculo SVG.
   - finishExercise() al llegar a 0 o al omitir, cambia a pantalla de cierre.
   - repeatExercise() y resetToHome() para navegación.
+  - Música: startMusic() inicia la música al comenzar el temporizador; stopMusic() la detiene con un fade-out de 1.2s al finalizar el ejercicio (finishExercise) o al cancelar (resetToHome). El botón 🔊 silencia/reproduce.
 
 TODO PARA LORéNA:
 - Si quiere añadir más ejercicios, añadir en el objeto exercises en el <script>.
