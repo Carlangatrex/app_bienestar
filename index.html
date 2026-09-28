@@ -73,21 +73,39 @@ Año: 2026
 
         body {
             background-color: #0b0f19;
-            padding-top: env(safe-area-inset-top);
         }
 
         .app-container {
             position: relative;
-            width: 100%;
-            max-width: 420px;
+            width: 90%;
+            max-width: 400px;
             min-height: 100vh;
             min-height: 100dvh;
             margin: 0 auto;
-            padding: 32px 20px;
+            box-sizing: border-box;
+            padding-top: calc(env(safe-area-inset-top, 0px) + 24px);
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-bottom: 24px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
+        }
+
+        #audioBtn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
         }
 
         header {
@@ -163,6 +181,7 @@ Año: 2026
             transition: all 0.15s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
             min-height: 64px;
+            width: 100%;
         }
 
         .symptom-btn:active {
@@ -332,11 +351,12 @@ Año: 2026
         }
 
         @media (max-width: 480px) {
-            body { padding-top: calc(env(safe-area-inset-top) + 8px); padding-bottom: 18px; }
-            header h1 { font-size: 1.1rem; }
+            h1 { font-size: 1.25rem; margin-top: 8px; }
+            h2 { font-size: 1.35rem; margin-bottom: 4px; }
+            .subtitulo { font-size: 0.9rem; margin-bottom: 20px; }
             header { padding-top: 4px; }
             .home-title { margin-top: 24px; }
-            .home-title h2 { font-size: 1.35rem; margin-bottom: 6px; }
+            .home-title h2 { font-size: 1.35rem; margin-bottom: 4px; }
             .home-title p { font-size: 0.9rem; }
             .symptom-btn { font-size: 1rem; padding: 14px 16px; min-height: 58px; gap: 12px; }
             .symptom-btn .icon { width: 40px; height: 40px; border-radius: 12px; }
@@ -364,9 +384,7 @@ Año: 2026
         }
 
         @media (max-height: 700px) {
-            body { padding-top: calc(env(safe-area-inset-top) + 4px); padding-bottom: 8px; }
             .home-title { margin-top: 16px; }
-            .home-title h2 { font-size: 1.2rem; margin-bottom: 4px; }
             .symptom-btn { min-height: 52px; padding: 10px 14px; }
             .symptom-grid { gap: 8px; }
             .instruction-box { padding: 12px 16px; }
@@ -473,8 +491,8 @@ Año: 2026
     </style>
 </head>
 <body><div class="app-container">
-    <button id="audioBtn" aria-label="Control de audio" style="position: absolute; top: 10px; right: 10px; width: 44px; height: 44px; border: none; border-radius: 50%; background: rgba(16, 185, 129, 0.2); color: #10b981; font-size: 20px; cursor: pointer;">🔊</button>
-    <audio id="bg-music" preload="metadata" loop muted onerror="alert('No se pudo cargar el archivo de audio. Coloca tu archivo MP3 de música zen en la carpeta y actualiza la ruta en el código src="tu_archivo_relajante.mp3");'>
+    <button id="audioBtn" aria-label="Control de audio">🔊</button>
+    <audio id="bg-music" preload="metadata" loop muted>
         <source src="tu_archivo_relajante.mp3" type="audio/mpeg">
     </audio>
 
@@ -486,7 +504,7 @@ Año: 2026
     <section id="screen-home" class="screen active">
         <div class="home-title">
             <h2>¿Qué siente tu cuerpo hoy?</h2>
-            <p>Selecciona una opción para empezar</p>
+            <p class="subtitulo">Selecciona una opción para empezar</p>
         </div>
 
         <div class="symptom-grid">
@@ -747,6 +765,12 @@ Año: 2026
     }
 
 // Music: starts with the exercise timer, stops when it finishes
+    if (bgMusic) {
+        bgMusic.addEventListener('error', () => {
+            console.warn('No se pudo cargar tu_archivo_relajante.mp3. La app sigue funcionando en silencio.');
+        });
+    }
+
     function startMusic() {
         if (!bgMusic) return;
         bgMusic.muted = false;
@@ -781,7 +805,7 @@ PROPÓSITO: Aplicación web progresiva (PWA) para ejercicios de autorregulación
 
 DISEÑO UX - PASOS CLAVE:
 1. Pantalla 1 (Home): Los 4 botones de entrada corporal ("pecho", "rabia", "exhausted", "nudo") deben estar ubicados al alcance del pulgar en la parte inferior.
-   - Se logró agrupando cabecera + .symptom-grid en el mismo bloque (max-width 420px) centrado verticalmente con flexbox en .app-container, sin huecos intermedios, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
+   - Se logró agrupando cabecera + .symptom-grid en el mismo bloque (width: 90%, max-width: 400px) centrado verticalmente con flexbox en .app-container, sin huecos intermedios, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
    - Los iconos fueron redesignados de emojis genéricos a SVGs estilo Lucide de trazo consistente con el tema oscuro, con fondo translúcido y color verde neón #10b981.
 
 2. Pantalla 2 (Ejercicio): La tarjeta con la instrucción del ejercicio debe ubicarse en la parte superior antes del temporizador.
