@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pausa-breve-v5';
+const CACHE_NAME = 'pausa-breve-v6';
 const SHELL = [
   './',
   './index.html',
