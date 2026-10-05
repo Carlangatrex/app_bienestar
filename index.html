@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pausa Breve - Autorregulación</title>
+<!--
+### Cuando necesites tranquilidad
+Que nunca te falten caminos  
+cuando la vida parezca difícil,  
+ni motivos para seguir sonriendo  
+cuando el día venga gris.
+
+Que encuentres calma  
+en las cosas pequeñas:  
+una conversación,  
+una canción,  
+un café,  
+un abrazo que llegue justo a tiempo.
+
+Y si alguna vez el mundo pesa demasiado,  
+recuerda que no tienes que llevarlo todo sola.
+
+Hay personas que aparecen en la vida  
+sin hacer ruido,  
+y terminan dejando una huella bonita.
+
+Tú eres una de ellas.
+
+Por eso, cuando necesites tranquilidad,  
+respira,  
+mira hacia adelante  
+y recuerda que, incluso a la distancia,  
+hay alguien que se alegra  
+de saber que estás bien.
+
+Porque quizá la felicidad venga y se vaya,  
+pero la tranquilidad  
+es ese pequeño lugar  
+al que siempre podemos volver.
+# Metadatos
+Versión: 1.0
+Diseñado: por Carlos Gonzalez
+Idea original: Lorena Molano
+Año: 2026
+-->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#090d16">
+        <link rel="stylesheet" href="style.css">
+</head>
+<body><div class="app-container">
+    <button id="audioBtn" aria-label="Control de audio">🔊</button>
+    <audio id="bg-music" preload="metadata" loop muted>
+        <source src="tu_archivo_relajante.mp3" type="audio/mpeg">
+    </audio>
+
+    <header>
+        <h1>Pausa Breve</h1>
+    </header>
+
+    <!-- SCREEN 1: SELECCIÓN DE SÍNTOMA -->
+    <section id="screen-home" class="screen active">
+        <div class="home-title">
+            <h2>¿Qué siente tu cuerpo hoy?</h2>
+            <p class="subtitulo">Selecciona una opción para empezar</p>
+        </div>
+
+        <div class="symptom-grid">
+            <button class="symptom-btn" data-accent="pecho" onclick="selectSymptom('pecho')">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
+                        <path d="M3.22 12H9.5l.5-1 2 4.5 2-7 1.5 3.5h5.27"/>
+                    </svg>
+                </span>
+                <span>Pecho o cabeza a mil</span>
+            </button>
+            <button class="symptom-btn" data-accent="rabia" onclick="selectSymptom('rabia')">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                    </svg>
+                </span>
+                <span>Mucha rabia o tensión</span>
+            </button>
+            <button class="symptom-btn" data-accent="exhausted" onclick="selectSymptom('exhausted')">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="7" width="16" height="10" rx="2" ry="2"/>
+                        <line x1="22" x2="22" y1="11" y2="13"/>
+                    </svg>
+                </span>
+                <span>Totalmente agotado o abrumado</span>
+            </button>
+            <button class="symptom-btn" data-accent="nudo" onclick="selectSymptom('nudo')">
+                <span class="icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18.087 4.592c-4.344-2.565-9.825-1.088-12.6 3.17-2.775 4.256-1.229 9.836 2.924 12.341"/>
+                        <path d="M15.7 6.66c-3.204-1.453-6.954-.15-8.4 2.7-1.45 2.85-.53 6.15 2.38 7.5"/>
+                        <path d="M13.47 8.6c-2.22-.842-4.77-.35-5.96 1.6-1.2 1.93-.15 4.1 1.85 5.01"/>
+                        <path d="M11.3 10.62c-1.31-.5-2.7-.1-3.36.95-.63 1.06-.05 2.3 1.03 2.84"/>
+                    </svg>
+                </span>
+                <span>Nudo en la garganta o el pecho</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- SCREEN 2: PREPARACIÓN Y EJECUCIÓN (TEMPORIZADOR MANUAL) -->
+    <section id="screen-exercise" class="screen">
+        <div class="exercise-container">
+            <div class="instruction-box">
+                <span id="exercise-name" class="exercise-tag">Suspiro Cíclico</span>
+                <p id="exercise-instruction" class="instruction-text">
+                    Inhala hondo por la nariz en 2 tiempos cortos (sin soltar el aire) y exhala muy despacio por la boca en 6 tiempos.
+                </p>
+            </div>
+
+            <div class="timer-display" style="margin: 16px 0;">
+                <div id="figura-svg" class="figura-svg"></div>
+
+                <div id="guia-respiracion" class="guia-respiracion" aria-live="polite"></div>
+                <div id="timer-number" class="timer-text">01:00</div>
+            </div>
+        </div>
+
+        <div class="action-btn-group">
+            <button id="btn-start" class="btn-main" onclick="startTimer()">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polygon points="10 8 16 12 10 16 10 8"/>
+                    </svg>
+                </span>
+                Comenzar ejercicio
+            </button>
+            <button id="btn-cancel" class="btn-subtle" onclick="resetToHome()">Cancelar</button>
+        </div>
+    </section>
+
+    <!-- SCREEN 3: CIERRE ESPIRITUAL -->
+    <section id="screen-closing" class="screen">
+        <div class="closing-container">
+            <div class="closing-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12.67 19a2 2 0 0 0 1.416-.588l6.154-6.172a6 6 0 0 0-8.49-8.49L5.586 9.914A2 2 0 0 0 5 11.328V18a1 1 0 0 0 1 1z"/>
+                    <path d="M16 8 2 22"/>
+                    <path d="M17.5 15H9"/>
+                </svg>
+            </div>
+            <div class="closing-card">
+                <div class="closing-title">Mensaje de Paz</div>
+                <p id="closing-text" class="closing-message">
+                    "Dios no te dio un espíritu de temor, sino de poder, amor y dominio propio. Su paz guarda tu corazón en este instante."
+                </p>
+            </div>
+        </div>
+
+        <div class="action-btn-group">
+            <button class="btn-main" style="background-color: var(--primary); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);" onclick="repeatExercise()">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                        <path d="M21 3v5h-5"/>
+                    </svg>
+                </span>
+                Repetir ejercicio
+            </button>
+            <button class="nav-btn-secondary" onclick="resetToHome()">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                        <polyline points="9 22 9 12 15 12 15 22"/>
+                    </svg>
+                </span>
+                Volver al inicio
+            </button>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+<!--
+PROYECTO: Pausa Breve - Autorregulación
+CREADO PARA: Lorena
+FECHA: Septiembre 2026
+PROPÓSITO: Aplicación web progresiva (PWA) para ejercicios de autorregulación emocional en 1 clic.
+
+DISEÑO UX - PASOS CLAVE:
+1. Pantalla 1 (Home): Los 4 botones de entrada corporal ("pecho", "rabia", "exhausted", "nudo") deben estar ubicados al alcance del pulgar en la parte inferior.
+   - Se logró agrupando cabecera + .symptom-grid en el mismo bloque (width: 90%, max-width: 400px) centrado verticalmente con flexbox en .app-container, sin huecos intermedios, y añadimos min-height: 64px en los botones para targets táctiles cómodos.
+   - Los iconos fueron redesignados de emojis genéricos a SVGs estilo Lucide de trazo consistente con el tema oscuro, con fondo translúcido y color verde neón #10b981.
+
+2. Pantalla 2 (Ejercicio): La tarjeta con la instrucción del ejercicio debe ubicarse en la parte superior antes del temporizador.
+   - Estructura: .instruction-box (arriba) > .timer-display (centro) > .action-btn-group, todo agrupado y centrado verticalmente en la pantalla (sin margin-top: auto ni flex-grow).
+   - El conteo inicia ESTÁTICO (01:00) y solo comienza a descontar al hacer clic en "🟢 Comenzar ejercicio"; la figura queda en pausa hasta entonces (animation-play-state: paused).
+   - El JS controla isRunning y el conteo con setInterval.
+   - Figura del ejercicio: contenedor #figura-svg (200×200px, max-width 225px; 175px en pantallas pequeñas) dentro de .timer-display. app.js inyecta ahí el SVG del ejercicio elegido SIN recargar la página (exercises[key].svg). Cada figura tiene su animación CSS: pecho = anatomía respiratoria (inhaleExhale 8s, lungPulse, corePulse, waveFlow); rabia = rabiaCiclo 10s (glow azul→naranja→azul) + vibra 0.26s (resplandor/vibración); exhausted = ondaExpand 6s escalonadas (ondas concéntricas expansivas) + calmaPulso; nudo = latido 4s + calorBrillo + pulso nd-pulso (cian-cálido). 100% SVG + CSS, respeta prefers-reduced-motion.
+   - La animación arranca en animation-play-state: paused (.timer-display svg *) y solo corre con la clase .animating en .timer-display; setBreathing(true|false) (en startTimer/finishExercise/resetToHome/selectSymptom) también alterna .running en .instruction-box: durante la ejecución la tarjeta superior se simplifica y solo queda el título del ejercicio (se oculta #exercise-instruction y se reduce el padding).
+   - Guía dinámica: #guia-respiracion va ENTRE el SVG y el contador (aria-live), font-size 1.4rem y font-weight bold (es la lectura principal). Muestra la fase en vivo según exercises[key].fases (array de {dur, texto, color} en app.js): sin números, solo frases directas ("Inhala profundo...", "Tensa todo el cuerpo...", "Suelta y libera...", "Mira 5 cosas...", "Siente tu mano..."). Colores con clases f-verde/f-cian/f-violeta/f-azul/f-rojo/f-calido y fade-out/fade-in de 300ms; setInterval de 1s en bucle (% cicloTotal), startGuia() solo al pulsar "Comenzar ejercicio" y stopGuia() (clearInterval + limpia texto) en finishExercise(), resetToHome() y selectSymptom().
+
+3. Pantalla 3 (Cierre): Al finalizar el tiempo u omitir, debe mostrar la tarjeta con el mensaje de paz espiritual y ofrecer únicamente dos botones al final: "Repetir ejercicio" y "Volver al inicio".
+   - Se muestra .closing-card con el mensaje y dos botones .btn-main y .nav-btn-secondary.
+   - Solo aparecen estos dos botones, sin adicionales.
+
+DISEÑO VISUAL (estilo AI Studio):
+- Fondos: #090d16 (general), #0f172a (tarjetas), #131c2e (botones síntomas).
+- Bordes: 1px solid #1e293b, border-radius: 18px.
+- Colores neón: #10b981 para texto y bordes en etiquetas destacadas.
+- Texto: #ffffff, font-weight: 700, sans-serif.
+- Íconos: SVGs estilo Lucide con stroke-currentColor, fijados en cuadrados con fondo rgba(16,185,129,0.1).
+- Responsive: @media (max-width: 480px) y (max-width: 360px) reducen tamaños de fuente y timer.
+- PWA: manifest.json y service worker (sw.js) para instalación en celular y carga offline.
+
+Estructura del Código:
+- HTML: 3 secciones <section class="screen"> (home, exercise, closing) con display none/active.
+- CSS: Variables :root, resets, estilos por pantalla, media queries responsive.
+- JavaScript: TODO está en app.js (index.html solo lo referencia con <script src="app.js">). Objeto exercises con title, duration, instruction, closing, fases[] ({dur, texto, color}) y svg (figura SVG inline) por cada tipo; variables de estado (currentKey, totalSeconds, remainingSeconds, isRunning, timerInterval, guiaTimer, guiaSecond).
+  - showScreen(screenId) para cambiar de pantalla.
+  - selectSymptom(key) para cargar datos + cargarFigura(data) (inyecta el SVG en #figura-svg) + limpiar la guía, todo sin recargar la página.
+  - startTimer() iniciado solo por clic, usa setInterval countdown para el conteo, llama setBreathing(true) (activa la figura y simplifica la tarjeta) y startGuia() (arranca las fases del ejercicio elegido).
+  - finishExercise() al llegar a 0 o al omitir, cambia a pantalla de cierre.
+  - repeatExercise() y resetToHome() para navegación.
+  - Música: startMusic() inicia la música al comenzar el temporizador; stopMusic() la detiene con un fade-out de 1.2s al finalizar el ejercicio (finishExercise) o al cancelar (resetToHome). El botón 🔊 silencia/reproduce.
+
+TODO PARA LORéNA:
+- Si quiere añadir más ejercicios, añadir una clave nueva en el objeto exercises de app.js (title, duration, instruction, closing, fases[] y svg).
+- Para cambiar colores, modificar las variables :root.
+- Para más pantallas o funcionalidades, mantener la misma estructura de cambio de pantalla con showScreen().
+
+CONCLUSIÓN:
+Esta app fue creada con dedicación para ayudar a Lorena a tomar un momento de paz y autorregulación en su día a día. Cada detalle, desde los iconos hasta la lógica del temporizador, fue pensado para que sea intuitivo, accesible y visualmente agradable en modo oscuro. Espero que le sea de mucha utilidad y que Dios la bendiga abundantemente.
+-->
+    <!--
+    -->
+</div></body>
+</html>
