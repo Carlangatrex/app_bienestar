@@ -134,6 +134,7 @@ let totalSeconds = 60;
 let remainingSeconds = 60;
 let timerInterval = null;
 let isRunning = false;
+let inicioReciente = 0;
 
 const PLAY_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span>';
 const STOP_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 6 18 6 18 18 6 18 6 6"/></svg></span>';
@@ -250,6 +251,7 @@ function stopGuia() {
 function startTimer() {
     if (isRunning) return;
     isRunning = true;
+    inicioReciente = Date.now();
     startMusic();
     setBreathing(true);
     startGuia();
@@ -270,6 +272,8 @@ function startTimer() {
 }
 
 function finishExercise() {
+    // Ignora el click sintético que sigue al pointerdown de "Comenzar" en móviles
+    if (isRunning && Date.now() - inicioReciente < 700) return;
     clearInterval(timerInterval);
     isRunning = false;
     setBreathing(false);
@@ -307,6 +311,19 @@ if ('serviceWorker' in navigator) {
             .catch((err) => console.log('Error al registrar Service Worker:', err));
     });
 }
+
+// ===== Activación táctil: pointerdown además de click, sin preventDefault =====
+document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
+    btn.addEventListener('pointerdown', () => selectSymptom(btn.dataset.accent));
+});
+const btnInicio = document.getElementById('btn-start');
+if (btnInicio) btnInicio.addEventListener('pointerdown', () => (isRunning ? finishExercise() : startTimer()));
+const btnCancelar = document.getElementById('btn-cancel');
+if (btnCancelar) btnCancelar.addEventListener('pointerdown', resetToHome);
+const btnRepetir = document.querySelector('#screen-closing .btn-main');
+if (btnRepetir) btnRepetir.addEventListener('pointerdown', repeatExercise);
+const btnVolver = document.querySelector('#screen-closing .nav-btn-secondary');
+if (btnVolver) btnVolver.addEventListener('pointerdown', resetToHome);
 
 // Audio control
 const audioBtn = document.getElementById('audioBtn');

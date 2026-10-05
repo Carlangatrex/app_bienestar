@@ -233,6 +233,45 @@
             overflow: hidden;
         }
 
+        /* ===== Endurecimiento móvil (iOS/Android): capas compuestas + trazos estables ===== */
+        .figura-svg,
+        .figura-svg svg {
+            will-change: transform;
+            transform: translateZ(0);
+        }
+
+        .figura-svg svg path,
+        .figura-svg svg circle,
+        .figura-svg svg ellipse,
+        .figura-svg svg line,
+        .figura-svg svg polyline,
+        .figura-svg svg polygon {
+            vector-effect: non-scaling-stroke;
+        }
+
+        .anatomy-breath,
+        .lungs,
+        .energy-core,
+        .pulse-wave,
+        .rabia-ciclo,
+        .rb-vibra,
+        .rb-orb,
+        .onda,
+        .ground-core,
+        .nd-calor,
+        .nd-corazon,
+        .nd-pulso {
+            will-change: transform, opacity;
+            transform: translateZ(0);
+        }
+
+        .symptom-btn,
+        .btn-main,
+        .btn-subtle,
+        .nav-btn-secondary {
+            touch-action: manipulation;
+        }
+
         .anatomy-head ellipse {
             fill: rgba(34, 211, 238, 0.07);
             stroke: #22d3ee;
@@ -258,15 +297,15 @@
         }
 
         .anatomy-breath {
-            transform-box: view-box;
-            transform-origin: 100px 150px;
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: inhaleExhale 8s ease-in-out infinite;
             filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55));
         }
 
         .lungs {
             transform-box: fill-box;
-            transform-origin: center;
+            transform-origin: center center;
             animation: lungPulse 8s ease-in-out infinite;
         }
 
@@ -287,11 +326,13 @@
         .energy-core {
             fill: url(#coreGrad);
             transform-box: fill-box;
-            transform-origin: center;
+            transform-origin: center center;
             animation: corePulse 8s ease-in-out infinite;
         }
 
         .pulse-wave {
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: waveFlow 2.4s linear infinite;
         }
 
@@ -356,13 +397,15 @@
         }
 
         .rabia-ciclo {
-            transform-box: view-box;
-            transform-origin: 100px 150px;
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: rabiaCiclo 10s ease-in-out infinite;
             filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
         }
 
         .rb-vibra {
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: vibra 0.26s linear infinite;
         }
 
@@ -370,6 +413,8 @@
             fill: url(#orbGrad);
             stroke: #38bdf8;
             stroke-width: 2;
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: rabiaOrb 10s ease-in-out infinite;
         }
 
@@ -406,7 +451,7 @@
             fill: none;
             stroke-width: 3;
             transform-box: fill-box;
-            transform-origin: center;
+            transform-origin: center center;
             animation: ondaExpand 6s ease-out infinite;
             opacity: 0;
         }
@@ -416,6 +461,8 @@
         .o3 { stroke: #34d399; animation-delay: 4s; }
 
         .ground-core {
+            transform-box: fill-box;
+            transform-origin: center center;
             animation: calmaPulso 6s ease-in-out infinite;
         }
 
@@ -470,7 +517,7 @@
         .nd-calor {
             fill: url(#calorGrad);
             transform-box: fill-box;
-            transform-origin: center;
+            transform-origin: center center;
             animation: calorBrillo 4s ease-in-out infinite;
         }
 
@@ -480,7 +527,7 @@
             stroke-width: 2.5;
             stroke-linejoin: round;
             transform-box: fill-box;
-            transform-origin: center;
+            transform-origin: center center;
             animation: latido 4s ease-in-out infinite;
             filter: drop-shadow(0 0 10px rgba(103, 232, 249, 0.7));
         }
@@ -490,6 +537,8 @@
             stroke: #fbbf24;
             stroke-width: 2.5;
             stroke-linecap: round;
+            transform-box: fill-box;
+            transform-origin: center center;
             filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
             animation: waveFlow 2.4s linear infinite;
         }

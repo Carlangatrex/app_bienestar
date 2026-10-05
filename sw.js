@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-somatica-v6';
+const CACHE_NAME = 'pwa-somatica-v7';
 const SHELL = [
   './',
   './index.html',
