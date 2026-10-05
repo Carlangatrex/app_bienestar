@@ -168,7 +168,6 @@ function selectSymptom(key) {
     const btnStart = document.getElementById('btn-start');
     btnStart.style.display = 'flex';
     btnStart.innerHTML = PLAY_ICON + 'Comenzar ejercicio';
-    btnStart.onclick = startTimer;
 
     document.getElementById('btn-cancel').textContent = 'Cancelar';
 
@@ -258,7 +257,6 @@ function startTimer() {
 
     const btnStart = document.getElementById('btn-start');
     btnStart.innerHTML = STOP_ICON + 'Omitir / Finalizar';
-    btnStart.onclick = finishExercise;
 
     timerInterval = setInterval(() => {
         remainingSeconds--;
@@ -302,7 +300,11 @@ if ('serviceWorker' in navigator) {
     // Si una versión nueva del SW toma el control, recarga para mostrarla
     let hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (hadController) window.location.reload();
+        // Recarga solo desde el inicio: nunca interrumpe un ejercicio en curso
+        if (hadController) {
+            const activa = document.querySelector('.screen.active');
+            if (!activa || activa.id === 'screen-home') window.location.reload();
+        }
         hadController = true;
     });
     window.addEventListener('load', () => {
@@ -312,27 +314,38 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// ===== Activación táctil: pointerdown además de click, sin preventDefault =====
+// ===== Activación de botones: pointerdown inmediato + click con preventDefault, sin duplicar =====
+function enlazar(el, accion) {
+    if (!el) return;
+    let ultimoPointer = 0;
+    el.addEventListener('pointerdown', () => {
+        ultimoPointer = Date.now();
+        accion();
+    });
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (Date.now() - ultimoPointer < 700) return; // ya ejecutado por pointerdown
+        accion();
+    });
+}
+
 document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
-    btn.addEventListener('pointerdown', () => selectSymptom(btn.dataset.accent));
+    enlazar(btn, () => selectSymptom(btn.dataset.accent));
 });
-const btnInicio = document.getElementById('btn-start');
-if (btnInicio) btnInicio.addEventListener('pointerdown', () => (isRunning ? finishExercise() : startTimer()));
-const btnCancelar = document.getElementById('btn-cancel');
-if (btnCancelar) btnCancelar.addEventListener('pointerdown', resetToHome);
-const btnRepetir = document.querySelector('#screen-closing .btn-main');
-if (btnRepetir) btnRepetir.addEventListener('pointerdown', repeatExercise);
-const btnVolver = document.querySelector('#screen-closing .nav-btn-secondary');
-if (btnVolver) btnVolver.addEventListener('pointerdown', resetToHome);
+enlazar(document.getElementById('btn-start'), () => (isRunning ? finishExercise() : startTimer()));
+enlazar(document.getElementById('btn-cancel'), resetToHome);
+enlazar(document.querySelector('#screen-closing .btn-main'), repeatExercise);
+enlazar(document.querySelector('#screen-closing .nav-btn-secondary'), resetToHome);
 
 // Audio control
 const audioBtn = document.getElementById('audioBtn');
 const bgMusic = document.getElementById('bg-music');
-if (audioBtn && bgMusic) {
-    let isMuted = false;
-    audioBtn.addEventListener('click', () => {
+let isMuted = false;
+if (audioBtn) {
+    enlazar(audioBtn, () => {
         isMuted = !isMuted;
-        bgMusic.muted = isMuted;
+        if (bgMusic) bgMusic.muted = isMuted;
     });
 }
 

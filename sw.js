@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-somatica-v8';
+const CACHE_NAME = 'pwa-somatica-v10';
 const SHELL = [
   './',
   './index.html',
@@ -63,7 +63,8 @@ self.addEventListener('fetch', (event) => {
           return response;
         })
         .catch(() =>
-          caches.match(event.request).then((cached) => cached || caches.match('./index.html'))
+          caches.match(event.request, { ignoreSearch: true })
+            .then((cached) => cached || caches.match('./index.html'))
         )
     );
     return;
@@ -71,7 +72,7 @@ self.addEventListener('fetch', (event) => {
 
   // Resto de assets (música, íconos, manifest): cache-first.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
+    caches.match(event.request, { ignoreSearch: true }).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
         if (puedeCachear(event.request, response)) {
