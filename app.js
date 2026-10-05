@@ -12,7 +12,7 @@ const exercises = {
             { dur: 1, texto: "Inhala un poco más...", color: "f-cian" },
             { dur: 5, texto: "Exhala despacio por la boca...", color: "f-violeta" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <linearGradient id="lungGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.85"/>
@@ -52,7 +52,7 @@ const exercises = {
             { dur: 5, texto: "Tensa todo el cuerpo...", color: "f-rojo" },
             { dur: 5, texto: "Suelta y libera la tensión...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <radialGradient id="orbGrad" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85"/>
@@ -82,7 +82,7 @@ const exercises = {
             { dur: 10, texto: "Escucha 4 sonidos distintos...", color: "f-azul" },
             { dur: 10, texto: "Siente 3 texturas con las manos...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <g class="ondas">
                 <circle class="onda o1" cx="100" cy="136" r="26"/>
                 <circle class="onda o2" cx="100" cy="136" r="26"/>
@@ -105,7 +105,7 @@ const exercises = {
             { dur: 4, texto: "Siente tu mano y su calor...", color: "f-calido" },
             { dur: 4, texto: "Nota tus latidos y respira...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <linearGradient id="corGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="#67e8f9"/>

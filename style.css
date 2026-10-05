@@ -78,7 +78,7 @@
             align-items: center;
             gap: 16px;
             width: 100%;
-            animation: fadeIn 0.3s ease-in-out;
+            animation: fadeIn 0.3s ease-in-out; -webkit-animation: fadeIn 0.3s ease-in-out;
         }
 
         .screen.active {
@@ -86,8 +86,8 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(6px); -webkit-transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); -webkit-transform: translateY(0); }
         }
 
         /* Screen 1: Home / Entry points */
@@ -136,7 +136,7 @@
         }
 
         .symptom-btn:active {
-            transform: scale(0.98);
+            transform: scale(0.98); -webkit-transform: scale(0.98);
             background-color: #334155;
             border-color: var(--primary);
         }
@@ -237,7 +237,7 @@
         .figura-svg,
         .figura-svg svg {
             will-change: transform;
-            transform: translateZ(0);
+            transform: translateZ(0); -webkit-transform: translateZ(0);
         }
 
         .figura-svg svg path,
@@ -261,8 +261,8 @@
         .nd-calor,
         .nd-corazon,
         .nd-pulso {
-            will-change: transform, opacity;
-            transform: translateZ(0);
+            will-change: transform, opacity, stroke-dashoffset;
+            transform: translateZ(0); -webkit-transform: translateZ(0);
         }
 
         .symptom-btn,
@@ -298,15 +298,15 @@
 
         .anatomy-breath {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: inhaleExhale 8s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: inhaleExhale 8s ease-in-out infinite; -webkit-animation: inhaleExhale 8s ease-in-out infinite;
             filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55));
         }
 
         .lungs {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: lungPulse 8s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: lungPulse 8s ease-in-out infinite; -webkit-animation: lungPulse 8s ease-in-out infinite;
         }
 
         .lung {
@@ -326,14 +326,14 @@
         .energy-core {
             fill: url(#coreGrad);
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: corePulse 8s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: corePulse 8s ease-in-out infinite; -webkit-animation: corePulse 8s ease-in-out infinite;
         }
 
         .pulse-wave {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: waveFlow 2.4s linear infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: waveFlow 2.4s linear infinite; -webkit-animation: waveFlow 2.4s linear infinite;
         }
 
         .pulse-wave path {
@@ -346,33 +346,33 @@
 
         /* Pausadas por defecto; solo corren con la clase .animating en .timer-display */
         .timer-display svg * {
-            animation-play-state: paused;
+            animation-play-state: paused; -webkit-animation-play-state: paused;
         }
 
         .timer-display.animating svg * {
-            animation-play-state: running;
+            animation-play-state: running; -webkit-animation-play-state: running;
         }
 
         /* Inhalación: 4s se expande + glow verde/cian. Exhalación: 4s se contrae + glow violeta/azul. */
         @keyframes inhaleExhale {
-            0%   { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55)); }
-            50%  { transform: scale(1.07); filter: drop-shadow(0 0 26px rgba(16, 185, 129, 0.95)); }
-            100% { transform: scale(1);    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55)); }
+            0%   { transform: scale(1); -webkit-transform: scale(1);    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55)); }
+            50%  { transform: scale(1.07); -webkit-transform: scale(1.07); filter: drop-shadow(0 0 26px rgba(16, 185, 129, 0.95)); }
+            100% { transform: scale(1); -webkit-transform: scale(1);    filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55)); }
         }
 
         @keyframes lungPulse {
-            0%, 100% { transform: scale(1); }
-            50%      { transform: scale(1.1); }
+            0%, 100% { transform: scale(1); -webkit-transform: scale(1); }
+            50%      { transform: scale(1.1); -webkit-transform: scale(1.1); }
         }
 
         @keyframes corePulse {
-            0%, 100% { transform: scale(0.85); opacity: 0.7; }
-            50%      { transform: scale(1.3);  opacity: 1; }
+            0%, 100% { transform: scale(0.85); -webkit-transform: scale(0.85); opacity: 0.7; }
+            50%      { transform: scale(1.3); -webkit-transform: scale(1.3);  opacity: 1; }
         }
 
         @keyframes waveFlow {
-            from { transform: translateX(0); }
-            to   { transform: translateX(-40px); }
+            from { transform: translateX(0); -webkit-transform: translateX(0); }
+            to   { transform: translateX(-40px); -webkit-transform: translateX(-40px); }
         }
 
         /* ===== Figura rabia: resplandor + vibración (ciclo 10s) ===== */
@@ -398,15 +398,15 @@
 
         .rabia-ciclo {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: rabiaCiclo 10s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: rabiaCiclo 10s ease-in-out infinite; -webkit-animation: rabiaCiclo 10s ease-in-out infinite;
             filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8));
         }
 
         .rb-vibra {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: vibra 0.26s linear infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: vibra 0.26s linear infinite; -webkit-animation: vibra 0.26s linear infinite;
         }
 
         .rb-orb {
@@ -414,8 +414,8 @@
             stroke: #38bdf8;
             stroke-width: 2;
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: rabiaOrb 10s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: rabiaOrb 10s ease-in-out infinite; -webkit-animation: rabiaOrb 10s ease-in-out infinite;
         }
 
         .rb-lineas {
@@ -427,9 +427,9 @@
         }
 
         @keyframes rabiaCiclo {
-            0%   { transform: scale(1);    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8)); }
-            50%  { transform: scale(1.07); filter: drop-shadow(0 0 30px rgba(251, 146, 60, 0.95)); }
-            100% { transform: scale(1);    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8)); }
+            0%   { transform: scale(1); -webkit-transform: scale(1);    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8)); }
+            50%  { transform: scale(1.07); -webkit-transform: scale(1.07); filter: drop-shadow(0 0 30px rgba(251, 146, 60, 0.95)); }
+            100% { transform: scale(1); -webkit-transform: scale(1);    filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.8)); }
         }
 
         @keyframes rabiaOrb {
@@ -439,11 +439,11 @@
         }
 
         @keyframes vibra {
-            0%   { transform: translate(0, 0); }
-            25%  { transform: translate(1.5px, -1.5px); }
-            50%  { transform: translate(-1.5px, 1px); }
-            75%  { transform: translate(1px, 1.5px); }
-            100% { transform: translate(0, 0); }
+            0%   { transform: translate(0, 0); -webkit-transform: translate(0, 0); }
+            25%  { transform: translate(1.5px, -1.5px); -webkit-transform: translate(1.5px, -1.5px); }
+            50%  { transform: translate(-1.5px, 1px); -webkit-transform: translate(-1.5px, 1px); }
+            75%  { transform: translate(1px, 1.5px); -webkit-transform: translate(1px, 1.5px); }
+            100% { transform: translate(0, 0); -webkit-transform: translate(0, 0); }
         }
 
         /* ===== Figura agotado: anclaje sensorial con ondas concéntricas ===== */
@@ -451,8 +451,8 @@
             fill: none;
             stroke-width: 3;
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: ondaExpand 6s ease-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: ondaExpand 6s ease-out infinite; -webkit-animation: ondaExpand 6s ease-out infinite;
             opacity: 0;
         }
 
@@ -462,8 +462,8 @@
 
         .ground-core {
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: calmaPulso 6s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: calmaPulso 6s ease-in-out infinite; -webkit-animation: calmaPulso 6s ease-in-out infinite;
         }
 
         .ground-core ellipse {
@@ -484,8 +484,8 @@
         }
 
         @keyframes ondaExpand {
-            0%   { transform: scale(0.5); opacity: 0.9; }
-            100% { transform: scale(3.4); opacity: 0; }
+            0%   { transform: scale(0.5); -webkit-transform: scale(0.5); opacity: 0.9; }
+            100% { transform: scale(3.4); -webkit-transform: scale(3.4); opacity: 0; }
         }
 
         @keyframes calmaPulso {
@@ -517,8 +517,8 @@
         .nd-calor {
             fill: url(#calorGrad);
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: calorBrillo 4s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: calorBrillo 4s ease-in-out infinite; -webkit-animation: calorBrillo 4s ease-in-out infinite;
         }
 
         .nd-corazon {
@@ -527,8 +527,8 @@
             stroke-width: 2.5;
             stroke-linejoin: round;
             transform-box: fill-box;
-            transform-origin: center center;
-            animation: latido 4s ease-in-out infinite;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
+            animation: latido 4s ease-in-out infinite; -webkit-animation: latido 4s ease-in-out infinite;
             filter: drop-shadow(0 0 10px rgba(103, 232, 249, 0.7));
         }
 
@@ -538,22 +538,22 @@
             stroke-width: 2.5;
             stroke-linecap: round;
             transform-box: fill-box;
-            transform-origin: center center;
+            transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
             filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.8));
-            animation: waveFlow 2.4s linear infinite;
+            animation: waveFlow 2.4s linear infinite; -webkit-animation: waveFlow 2.4s linear infinite;
         }
 
         @keyframes latido {
-            0%, 100% { transform: scale(1); }
-            12%      { transform: scale(1.12); }
-            24%      { transform: scale(1); }
-            36%      { transform: scale(1.08); }
-            50%      { transform: scale(1); }
+            0%, 100% { transform: scale(1); -webkit-transform: scale(1); }
+            12%      { transform: scale(1.12); -webkit-transform: scale(1.12); }
+            24%      { transform: scale(1); -webkit-transform: scale(1); }
+            36%      { transform: scale(1.08); -webkit-transform: scale(1.08); }
+            50%      { transform: scale(1); -webkit-transform: scale(1); }
         }
 
         @keyframes calorBrillo {
-            0%, 100% { transform: scale(0.9); opacity: 0.7; }
-            50%      { transform: scale(1.25); opacity: 1; }
+            0%, 100% { transform: scale(0.9); -webkit-transform: scale(0.9); opacity: 0.7; }
+            50%      { transform: scale(1.25); -webkit-transform: scale(1.25); opacity: 1; }
         }
 
         .timer-text {
@@ -587,10 +587,6 @@
         .guia-respiracion.f-azul    { color: #60a5fa; }
         .guia-respiracion.f-rojo    { color: #fb923c; }
         .guia-respiracion.f-calido  { color: #fbbf24; }
-
-        @media (prefers-reduced-motion: reduce) {
-            .timer-display svg * { animation: none; }
-        }
 
         .action-btn-group {
             width: 100%;
@@ -631,7 +627,7 @@
         }
 
         .btn-main:active {
-            transform: scale(0.98);
+            transform: scale(0.98); -webkit-transform: scale(0.98);
             filter: brightness(0.9);
         }
 
@@ -760,7 +756,7 @@
         }
 
         .nav-btn-secondary:active {
-            transform: scale(0.98);
+            transform: scale(0.98); -webkit-transform: scale(0.98);
             background-color: #334155;
         }
 
