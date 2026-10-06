@@ -12,7 +12,7 @@ const exercises = {
             { dur: 1, texto: "Inhala un poco más...", color: "f-cian" },
             { dur: 5, texto: "Exhala despacio por la boca...", color: "f-violeta" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <linearGradient id="lungGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.85"/>
@@ -52,7 +52,7 @@ const exercises = {
             { dur: 5, texto: "Tensa todo el cuerpo...", color: "f-rojo" },
             { dur: 5, texto: "Suelta y libera la tensión...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <radialGradient id="orbGrad" cx="50%" cy="50%" r="50%">
                     <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.85"/>
@@ -82,7 +82,7 @@ const exercises = {
             { dur: 10, texto: "Escucha 4 sonidos distintos...", color: "f-azul" },
             { dur: 10, texto: "Siente 3 texturas con las manos...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <g class="ondas">
                 <circle class="onda o1" cx="100" cy="136" r="26"/>
                 <circle class="onda o2" cx="100" cy="136" r="26"/>
@@ -105,7 +105,7 @@ const exercises = {
             { dur: 4, texto: "Siente tu mano y su calor...", color: "f-calido" },
             { dur: 4, texto: "Nota tus latidos y respira...", color: "f-verde" }
         ],
-        svg: `<svg viewBox="0 0 200 240" aria-hidden="true">
+        svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
                 <linearGradient id="corGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stop-color="#67e8f9"/>
@@ -134,6 +134,7 @@ let totalSeconds = 60;
 let remainingSeconds = 60;
 let timerInterval = null;
 let isRunning = false;
+let inicioReciente = 0;
 
 const PLAY_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span>';
 const STOP_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 6 18 6 18 18 6 18 6 6"/></svg></span>';
@@ -167,7 +168,6 @@ function selectSymptom(key) {
     const btnStart = document.getElementById('btn-start');
     btnStart.style.display = 'flex';
     btnStart.innerHTML = PLAY_ICON + 'Comenzar ejercicio';
-    btnStart.onclick = startTimer;
 
     document.getElementById('btn-cancel').textContent = 'Cancelar';
 
@@ -250,13 +250,13 @@ function stopGuia() {
 function startTimer() {
     if (isRunning) return;
     isRunning = true;
+    inicioReciente = Date.now();
     startMusic();
     setBreathing(true);
     startGuia();
 
     const btnStart = document.getElementById('btn-start');
     btnStart.innerHTML = STOP_ICON + 'Omitir / Finalizar';
-    btnStart.onclick = finishExercise;
 
     timerInterval = setInterval(() => {
         remainingSeconds--;
@@ -270,6 +270,8 @@ function startTimer() {
 }
 
 function finishExercise() {
+    // Ignora el click sintético que sigue al pointerdown de "Comenzar" en móviles
+    if (isRunning && Date.now() - inicioReciente < 700) return;
     clearInterval(timerInterval);
     isRunning = false;
     setBreathing(false);
@@ -298,7 +300,11 @@ if ('serviceWorker' in navigator) {
     // Si una versión nueva del SW toma el control, recarga para mostrarla
     let hadController = !!navigator.serviceWorker.controller;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (hadController) window.location.reload();
+        // Recarga solo desde el inicio: nunca interrumpe un ejercicio en curso
+        if (hadController) {
+            const activa = document.querySelector('.screen.active');
+            if (!activa || activa.id === 'screen-home') window.location.reload();
+        }
         hadController = true;
     });
     window.addEventListener('load', () => {
@@ -308,14 +314,38 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+// ===== Activación de botones: pointerdown inmediato + click con preventDefault, sin duplicar =====
+function enlazar(el, accion) {
+    if (!el) return;
+    let ultimoPointer = 0;
+    el.addEventListener('pointerdown', () => {
+        ultimoPointer = Date.now();
+        accion();
+    });
+    el.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (Date.now() - ultimoPointer < 700) return; // ya ejecutado por pointerdown
+        accion();
+    });
+}
+
+document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
+    enlazar(btn, () => selectSymptom(btn.dataset.accent));
+});
+enlazar(document.getElementById('btn-start'), () => (isRunning ? finishExercise() : startTimer()));
+enlazar(document.getElementById('btn-cancel'), resetToHome);
+enlazar(document.querySelector('#screen-closing .btn-main'), repeatExercise);
+enlazar(document.querySelector('#screen-closing .nav-btn-secondary'), resetToHome);
+
 // Audio control
 const audioBtn = document.getElementById('audioBtn');
 const bgMusic = document.getElementById('bg-music');
-if (audioBtn && bgMusic) {
-    let isMuted = false;
-    audioBtn.addEventListener('click', () => {
+let isMuted = false;
+if (audioBtn) {
+    enlazar(audioBtn, () => {
         isMuted = !isMuted;
-        bgMusic.muted = isMuted;
+        if (bgMusic) bgMusic.muted = isMuted;
     });
 }
 

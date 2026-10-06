@@ -44,12 +44,15 @@ Diseñado: por Carlos Gonzalez
 Idea original: Lorena Molano
 Año: 2026
 -->
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="./icon.svg">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://cdn-icons-png.flaticon.com/512/3063/3063822.png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090d16">
-        <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body><div class="app-container">
-    <button id="audioBtn" aria-label="Control de audio">🔊</button>
+    <button type="button" id="audioBtn" aria-label="Control de audio">🔊</button>
     <audio id="bg-music" preload="metadata" loop muted>
         <source src="tu_archivo_relajante.mp3" type="audio/mpeg">
     </audio>
@@ -66,7 +69,7 @@ Año: 2026
         </div>
 
         <div class="symptom-grid">
-            <button class="symptom-btn" data-accent="pecho" onclick="selectSymptom('pecho')">
+            <button type="button" class="symptom-btn" data-accent="pecho">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>
@@ -75,7 +78,7 @@ Año: 2026
                 </span>
                 <span>Pecho o cabeza a mil</span>
             </button>
-            <button class="symptom-btn" data-accent="rabia" onclick="selectSymptom('rabia')">
+            <button type="button" class="symptom-btn" data-accent="rabia">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
@@ -83,7 +86,7 @@ Año: 2026
                 </span>
                 <span>Mucha rabia o tensión</span>
             </button>
-            <button class="symptom-btn" data-accent="exhausted" onclick="selectSymptom('exhausted')">
+            <button type="button" class="symptom-btn" data-accent="exhausted">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="2" y="7" width="16" height="10" rx="2" ry="2"/>
@@ -92,7 +95,7 @@ Año: 2026
                 </span>
                 <span>Totalmente agotado o abrumado</span>
             </button>
-            <button class="symptom-btn" data-accent="nudo" onclick="selectSymptom('nudo')">
+            <button type="button" class="symptom-btn" data-accent="nudo">
                 <span class="icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M18.087 4.592c-4.344-2.565-9.825-1.088-12.6 3.17-2.775 4.256-1.229 9.836 2.924 12.341"/>
@@ -125,7 +128,7 @@ Año: 2026
         </div>
 
         <div class="action-btn-group">
-            <button id="btn-start" class="btn-main" onclick="startTimer()">
+            <button type="button" id="btn-start" class="btn-main">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"/>
@@ -134,7 +137,7 @@ Año: 2026
                 </span>
                 Comenzar ejercicio
             </button>
-            <button id="btn-cancel" class="btn-subtle" onclick="resetToHome()">Cancelar</button>
+            <button type="button" id="btn-cancel" class="btn-subtle">Cancelar</button>
         </div>
     </section>
 
@@ -157,7 +160,7 @@ Año: 2026
         </div>
 
         <div class="action-btn-group">
-            <button class="btn-main" style="background-color: var(--primary); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);" onclick="repeatExercise()">
+            <button type="button" class="btn-main" style="background-color: var(--primary); box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
@@ -166,7 +169,7 @@ Año: 2026
                 </span>
                 Repetir ejercicio
             </button>
-            <button class="nav-btn-secondary" onclick="resetToHome()">
+            <button type="button" class="nav-btn-secondary">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
@@ -178,7 +181,7 @@ Año: 2026
         </div>
     </section>
 
-    <script src="app.js"></script>
+    <script src="./app.js?v=10"></script>
 <!--
 PROYECTO: Pausa Breve - Autorregulación
 CREADO PARA: Lorena
@@ -194,7 +197,7 @@ DISEÑO UX - PASOS CLAVE:
    - Estructura: .instruction-box (arriba) > .timer-display (centro) > .action-btn-group, todo agrupado y centrado verticalmente en la pantalla (sin margin-top: auto ni flex-grow).
    - El conteo inicia ESTÁTICO (01:00) y solo comienza a descontar al hacer clic en "🟢 Comenzar ejercicio"; la figura queda en pausa hasta entonces (animation-play-state: paused).
    - El JS controla isRunning y el conteo con setInterval.
-   - Figura del ejercicio: contenedor #figura-svg (200×200px, max-width 225px; 175px en pantallas pequeñas) dentro de .timer-display. app.js inyecta ahí el SVG del ejercicio elegido SIN recargar la página (exercises[key].svg). Cada figura tiene su animación CSS: pecho = anatomía respiratoria (inhaleExhale 8s, lungPulse, corePulse, waveFlow); rabia = rabiaCiclo 10s (glow azul→naranja→azul) + vibra 0.26s (resplandor/vibración); exhausted = ondaExpand 6s escalonadas (ondas concéntricas expansivas) + calmaPulso; nudo = latido 4s + calorBrillo + pulso nd-pulso (cian-cálido). 100% SVG + CSS, respeta prefers-reduced-motion.
+   - Figura del ejercicio: contenedor #figura-svg (200×200px, max-width 225px; 175px en pantallas pequeñas) dentro de .timer-display. app.js inyecta ahí el SVG del ejercicio elegido SIN recargar la página (exercises[key].svg). Cada figura tiene su animación CSS: pecho = anatomía respiratoria (inhaleExhale 8s, lungPulse, corePulse, waveFlow); rabia = rabiaCiclo 10s (glow azul→naranja→azul) + vibra 0.26s (resplandor/vibración); exhausted = ondaExpand 6s escalonadas (ondas concéntricas expansivas) + calmaPulso; nudo = latido 4s + calorBrillo + pulso nd-pulso (cian-cálido). 100% SVG + CSS, con prefijos -webkit- para Safari Mobile.
    - La animación arranca en animation-play-state: paused (.timer-display svg *) y solo corre con la clase .animating en .timer-display; setBreathing(true|false) (en startTimer/finishExercise/resetToHome/selectSymptom) también alterna .running en .instruction-box: durante la ejecución la tarjeta superior se simplifica y solo queda el título del ejercicio (se oculta #exercise-instruction y se reduce el padding).
    - Guía dinámica: #guia-respiracion va ENTRE el SVG y el contador (aria-live), font-size 1.4rem y font-weight bold (es la lectura principal). Muestra la fase en vivo según exercises[key].fases (array de {dur, texto, color} en app.js): sin números, solo frases directas ("Inhala profundo...", "Tensa todo el cuerpo...", "Suelta y libera...", "Mira 5 cosas...", "Siente tu mano..."). Colores con clases f-verde/f-cian/f-violeta/f-azul/f-rojo/f-calido y fade-out/fade-in de 300ms; setInterval de 1s en bucle (% cicloTotal), startGuia() solo al pulsar "Comenzar ejercicio" y stopGuia() (clearInterval + limpia texto) en finishExercise(), resetToHome() y selectSymptom().
 
