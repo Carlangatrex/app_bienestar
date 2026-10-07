@@ -40,7 +40,8 @@
             padding-bottom: 24px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: safe center;
+            overflow-y: auto;
             align-items: center;
         }
 
@@ -224,6 +225,23 @@
             width: 200px;
             height: 200px;
             max-width: 225px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Retroalimentación táctil inmediata al tocar la figura */
+        .figura-svg:active {
+            transform: scale(0.98); -webkit-transform: scale(0.98);
+        }
+
+        .svg-hint {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            text-align: center;
+            margin: 0;
         }
 
         .figura-svg svg {
@@ -589,6 +607,8 @@
         .guia-respiracion.f-calido  { color: #fbbf24; }
 
         .action-btn-group {
+            position: relative;
+            z-index: 10;
             width: 100%;
             max-width: 400px;
             display: flex;
@@ -601,7 +621,8 @@
             color: #ffffff;
             border: none;
             border-radius: 16px;
-            padding: 18px;
+            padding: 14px 24px;
+            min-height: 48px;
             font-size: 1.2rem;
             font-weight: 700;
             cursor: pointer;
@@ -672,7 +693,7 @@
             .closing-message { font-size: 1.1rem; }
             .closing-icon { width: 64px; height: 64px; border-radius: 20px; }
             .closing-icon svg { width: 32px; height: 32px; }
-            .btn-main, .nav-btn-secondary { font-size: 1rem; padding: 14px; min-height: 52px; }
+            .btn-main, .nav-btn-secondary { font-size: 1rem; padding: 14px 24px; min-height: 52px; }
             .action-btn-group { gap: 10px; }
         }
 
@@ -693,7 +714,7 @@
             .figura-svg { width: 175px; height: 175px; }
             .timer-text { font-size: 1.2rem; }
             .action-btn-group { gap: 8px; }
-            .btn-main, .nav-btn-secondary { min-height: 48px; padding: 12px; font-size: 0.95rem; }
+            .btn-main, .nav-btn-secondary { min-height: 48px; padding: 14px 24px; font-size: 0.95rem; }
             .closing-icon { width: 52px; height: 52px; }
             .closing-message { font-size: 1rem; }
         }
