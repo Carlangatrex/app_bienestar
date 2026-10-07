@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v17-svg-tap-fix';
+const CACHE_NAME = 'pwa-v18-touch-event-fix';
 const SHELL = [
   './',
   './index.html',
