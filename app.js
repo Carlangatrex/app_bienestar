@@ -350,14 +350,18 @@ function enlazar(el, accion) {
 document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
     enlazar(btn, () => selectSymptom(btn.dataset.accent));
 });
-// ===== Activador principal: la figura SVG (tocar o Enter/Espacio alterna iniciar/finalizar) =====
+// ===== Activador principal: la figura SVG (SOLO se activa al tocarla; nunca al cargar) =====
 function alternarEjercicio() {
     if (isRunning) finishExercise(); else startTimer();
 }
 
 const figuraSvg = document.getElementById('figura-svg');
-enlazar(figuraSvg, alternarEjercicio);
 if (figuraSvg) {
+    figuraSvg.addEventListener('click', (e) => {
+        e.preventDefault();   // evita comportamientos fantasma en touch
+        e.stopPropagation();
+        alternarEjercicio();   // se ejecuta SOLO al tocar el SVG
+    });
     figuraSvg.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault(); // evita el scroll de la página con Espacio
@@ -411,3 +415,14 @@ function stopMusic() {
         }
     }, fadeMs);
 }
+
+// ===== Estado inicial: pausado y detenido; nada arranca hasta tocar la figura =====
+isRunning = false;
+clearInterval(timerInterval);
+setBreathing(false);
+stopGuia();
+if (bgMusic) bgMusic.pause();
+const hintInicial = document.getElementById('svg-hint');
+if (hintInicial) hintInicial.style.display = ''; // "Toca la figura para comenzar" visible
+const figuraInicial = document.getElementById('figura-svg');
+if (figuraInicial) figuraInicial.setAttribute('aria-label', 'Iniciar ejercicio de respiración');

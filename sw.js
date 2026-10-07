@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v17-app-icon';
+const CACHE_NAME = 'pwa-v17-svg-tap-fix';
 const SHELL = [
   './',
   './index.html',
