@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v15-svg-trigger';
+const CACHE_NAME = 'pwa-v16-null-check-fix';
 const SHELL = [
   './',
   './index.html',

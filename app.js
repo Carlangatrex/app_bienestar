@@ -147,14 +147,29 @@ function cargarFigura(data) {
 }
 
 function selectSymptom(key) {
-    currentKey = key;
     const data = exercises[key];
+    if (!data) {
+        console.warn(`La rutina con clave '${key}' no existe en el objeto exercises.`);
+        return;
+    }
+
+    currentKey = key;
     totalSeconds = data.duration;
     remainingSeconds = data.duration;
 
-    document.getElementById('exercise-name').textContent = data.title;
-    document.getElementById('exercise-instruction').textContent = data.instruction;
-    document.getElementById('closing-text').textContent = `"${data.closing}"`;
+    // Valida cada elemento antes de tocar sus propiedades (evita TypeError: null.style)
+    const obtener = (id) => {
+        const targetElement = document.getElementById(id);
+        if (!targetElement) console.warn(`El elemento con ID '${id}' no existe en el DOM.`);
+        return targetElement;
+    };
+
+    const exerciseName = obtener('exercise-name');
+    if (exerciseName) exerciseName.textContent = data.title;
+    const exerciseInstruction = obtener('exercise-instruction');
+    if (exerciseInstruction) exerciseInstruction.textContent = data.instruction;
+    const closingText = obtener('closing-text');
+    if (closingText) closingText.textContent = `"${data.closing}"`;
 
     cargarFigura(data);
     updateTimerDisplay();
@@ -162,12 +177,13 @@ function selectSymptom(key) {
     stopGuia();
 
     // Reset del activador SVG (figura): texto visible + aria de inicio
-    const hint = document.getElementById('svg-hint');
+    const hint = obtener('svg-hint');
     if (hint) hint.style.display = '';
-    const cont = document.getElementById('figura-svg');
+    const cont = obtener('figura-svg');
     if (cont) cont.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
 
-    document.getElementById('btn-cancel').textContent = 'Cancelar';
+    const btnCancel = obtener('btn-cancel');
+    if (btnCancel) btnCancel.textContent = 'Cancelar';
 
     showScreen('screen-exercise');
 }
