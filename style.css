@@ -225,6 +225,23 @@
             width: 200px;
             height: 200px;
             max-width: 225px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Retroalimentación táctil inmediata al tocar la figura */
+        .figura-svg:active {
+            transform: scale(0.98); -webkit-transform: scale(0.98);
+        }
+
+        .svg-hint {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--text-sub);
+            text-align: center;
+            margin: 0;
         }
 
         .figura-svg svg {

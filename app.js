@@ -136,9 +136,6 @@ let timerInterval = null;
 let isRunning = false;
 let inicioReciente = 0;
 
-const PLAY_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg></span>';
-const STOP_ICON = '<span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 6 18 6 18 18 6 18 6 6"/></svg></span>';
-
 function showScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
@@ -164,10 +161,11 @@ function selectSymptom(key) {
     setBreathing(false);
     stopGuia();
 
-    // Reset button states
-    const btnStart = document.getElementById('btn-start');
-    btnStart.style.display = 'flex';
-    btnStart.innerHTML = PLAY_ICON + 'Comenzar ejercicio';
+    // Reset del activador SVG (figura): texto visible + aria de inicio
+    const hint = document.getElementById('svg-hint');
+    if (hint) hint.style.display = '';
+    const cont = document.getElementById('figura-svg');
+    if (cont) cont.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
 
     document.getElementById('btn-cancel').textContent = 'Cancelar';
 
@@ -255,8 +253,11 @@ function startTimer() {
     setBreathing(true);
     startGuia();
 
-    const btnStart = document.getElementById('btn-start');
-    btnStart.innerHTML = STOP_ICON + 'Omitir / Finalizar';
+    // El toque en la figura oculta el texto y cambia la etiqueta a "finalizar"
+    const hint = document.getElementById('svg-hint');
+    if (hint) hint.style.display = 'none';
+    const cont = document.getElementById('figura-svg');
+    if (cont) cont.setAttribute('aria-label', 'Finalizar ejercicio');
 
     timerInterval = setInterval(() => {
         remainingSeconds--;
@@ -270,7 +271,7 @@ function startTimer() {
 }
 
 function finishExercise() {
-    // Ignora el click sintético que sigue al pointerdown de "Comenzar" en móviles
+    // Ignora el click sintético que sigue al pointerdown de la figura en móviles
     if (isRunning && Date.now() - inicioReciente < 700) return;
     clearInterval(timerInterval);
     isRunning = false;
@@ -333,7 +334,21 @@ function enlazar(el, accion) {
 document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
     enlazar(btn, () => selectSymptom(btn.dataset.accent));
 });
-enlazar(document.getElementById('btn-start'), () => (isRunning ? finishExercise() : startTimer()));
+// ===== Activador principal: la figura SVG (tocar o Enter/Espacio alterna iniciar/finalizar) =====
+function alternarEjercicio() {
+    if (isRunning) finishExercise(); else startTimer();
+}
+
+const figuraSvg = document.getElementById('figura-svg');
+enlazar(figuraSvg, alternarEjercicio);
+if (figuraSvg) {
+    figuraSvg.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault(); // evita el scroll de la página con Espacio
+            alternarEjercicio();
+        }
+    });
+}
 enlazar(document.getElementById('btn-cancel'), resetToHome);
 enlazar(document.querySelector('#screen-closing .btn-main'), repeatExercise);
 enlazar(document.querySelector('#screen-closing .nav-btn-secondary'), resetToHome);
