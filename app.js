@@ -135,8 +135,10 @@ let remainingSeconds = 60;
 let timerInterval = null;
 let isRunning = false;
 let inicioReciente = 0;
+let ultimaNavegacion = 0; // instante del último cambio de pantalla (bloquea clics fantasma)
 
 function showScreen(screenId) {
+    ultimaNavegacion = Date.now();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
 }
@@ -147,6 +149,8 @@ function cargarFigura(data) {
 }
 
 function selectSymptom(key) {
+    // Bloquea el clic fantasma del gesto anterior si acaba de cambiar la pantalla
+    if (Date.now() - ultimaNavegacion < 300) return;
     const data = exercises[key];
     if (!data) {
         console.warn(`La rutina con clave '${key}' no existe en el objeto exercises.`);
@@ -329,18 +333,13 @@ if ('serviceWorker' in navigator) {
     });
 }
 
-// ===== Activación de botones: pointerdown inmediato + click con preventDefault, sin duplicar =====
+// ===== Activación de botones: UN solo 'click' por gesto (sin pointerdown: evita que la pantalla
+// cambie a mitad de toque y que el click sintético caiga sobre lo que aparece debajo) =====
 function enlazar(el, accion) {
     if (!el) return;
-    let ultimoPointer = 0;
-    el.addEventListener('pointerdown', () => {
-        ultimoPointer = Date.now();
-        accion();
-    });
     el.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        if (Date.now() - ultimoPointer < 700) return; // ya ejecutado por pointerdown
         accion();
     });
 }
@@ -354,6 +353,9 @@ if (figuraSvg) {
     figuraSvg.addEventListener('click', (e) => {
         e.preventDefault();
         e.stopPropagation();
+
+        // Ignora el clic fantasma si la pantalla acaba de cambiar (vino de otra vista)
+        if (Date.now() - ultimaNavegacion < 300) return;
 
         // Solo inicia si la rutina NO está corriendo ya (evita doble disparo)
         if (!isRunning) {

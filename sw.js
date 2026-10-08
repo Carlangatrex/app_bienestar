@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v18-touch-event-fix';
+const CACHE_NAME = 'pwa-v19-ghost-click-fix';
 const SHELL = [
   './',
   './index.html',
