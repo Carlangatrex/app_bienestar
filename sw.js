@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v15-svg-trigger';
+const CACHE_NAME = 'pwa-v18-touch-event-fix';
 const SHELL = [
   './',
   './index.html',
@@ -6,7 +6,10 @@ const SHELL = [
   './app.js',
   './manifest.json',
   './favicon.ico',
-  './icon.svg'
+  './icon.svg',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-180.png'
 ];
 
 self.addEventListener('install', (event) => {

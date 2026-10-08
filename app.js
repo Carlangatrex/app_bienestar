@@ -147,14 +147,29 @@ function cargarFigura(data) {
 }
 
 function selectSymptom(key) {
-    currentKey = key;
     const data = exercises[key];
+    if (!data) {
+        console.warn(`La rutina con clave '${key}' no existe en el objeto exercises.`);
+        return;
+    }
+
+    currentKey = key;
     totalSeconds = data.duration;
     remainingSeconds = data.duration;
 
-    document.getElementById('exercise-name').textContent = data.title;
-    document.getElementById('exercise-instruction').textContent = data.instruction;
-    document.getElementById('closing-text').textContent = `"${data.closing}"`;
+    // Valida cada elemento antes de tocar sus propiedades (evita TypeError: null.style)
+    const obtener = (id) => {
+        const targetElement = document.getElementById(id);
+        if (!targetElement) console.warn(`El elemento con ID '${id}' no existe en el DOM.`);
+        return targetElement;
+    };
+
+    const exerciseName = obtener('exercise-name');
+    if (exerciseName) exerciseName.textContent = data.title;
+    const exerciseInstruction = obtener('exercise-instruction');
+    if (exerciseInstruction) exerciseInstruction.textContent = data.instruction;
+    const closingText = obtener('closing-text');
+    if (closingText) closingText.textContent = `"${data.closing}"`;
 
     cargarFigura(data);
     updateTimerDisplay();
@@ -162,12 +177,13 @@ function selectSymptom(key) {
     stopGuia();
 
     // Reset del activador SVG (figura): texto visible + aria de inicio
-    const hint = document.getElementById('svg-hint');
+    const hint = obtener('svg-hint');
     if (hint) hint.style.display = '';
-    const cont = document.getElementById('figura-svg');
+    const cont = obtener('figura-svg');
     if (cont) cont.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
 
-    document.getElementById('btn-cancel').textContent = 'Cancelar';
+    const btnCancel = obtener('btn-cancel');
+    if (btnCancel) btnCancel.textContent = 'Cancelar';
 
     showScreen('screen-exercise');
 }
@@ -253,11 +269,9 @@ function startTimer() {
     setBreathing(true);
     startGuia();
 
-    // El toque en la figura oculta el texto y cambia la etiqueta a "finalizar"
+    // El inicio de la animación oculta el texto "Toca la figura para comenzar"
     const hint = document.getElementById('svg-hint');
     if (hint) hint.style.display = 'none';
-    const cont = document.getElementById('figura-svg');
-    if (cont) cont.setAttribute('aria-label', 'Finalizar ejercicio');
 
     timerInterval = setInterval(() => {
         remainingSeconds--;
@@ -271,7 +285,7 @@ function startTimer() {
 }
 
 function finishExercise() {
-    // Ignora el click sintético que sigue al pointerdown de la figura en móviles
+    // Ignora un segundo disparo inmediato tras iniciar (clic sintético en móviles)
     if (isRunning && Date.now() - inicioReciente < 700) return;
     clearInterval(timerInterval);
     isRunning = false;
@@ -334,18 +348,22 @@ function enlazar(el, accion) {
 document.querySelectorAll('.symptom-btn[data-accent]').forEach((btn) => {
     enlazar(btn, () => selectSymptom(btn.dataset.accent));
 });
-// ===== Activador principal: la figura SVG (tocar o Enter/Espacio alterna iniciar/finalizar) =====
-function alternarEjercicio() {
-    if (isRunning) finishExercise(); else startTimer();
-}
-
+// ===== Activador principal: UN SOLO listener 'click' en el SVG (sin touchstart/touchend) =====
 const figuraSvg = document.getElementById('figura-svg');
-enlazar(figuraSvg, alternarEjercicio);
 if (figuraSvg) {
+    figuraSvg.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Solo inicia si la rutina NO está corriendo ya (evita doble disparo)
+        if (!isRunning) {
+            startTimer();
+        }
+    });
     figuraSvg.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault(); // evita el scroll de la página con Espacio
-            alternarEjercicio();
+            if (!isRunning) startTimer();
         }
     });
 }
@@ -395,3 +413,14 @@ function stopMusic() {
         }
     }, fadeMs);
 }
+
+// ===== Estado inicial: pausado y detenido; nada arranca hasta tocar la figura =====
+isRunning = false;
+clearInterval(timerInterval);
+setBreathing(false);
+stopGuia();
+if (bgMusic) bgMusic.pause();
+const hintInicial = document.getElementById('svg-hint');
+if (hintInicial) hintInicial.style.display = ''; // "Toca la figura para comenzar" visible
+const figuraInicial = document.getElementById('figura-svg');
+if (figuraInicial) figuraInicial.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
