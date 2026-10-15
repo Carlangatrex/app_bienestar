@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v23-pecho-555';
+const CACHE_NAME = 'pwa-v24-pecho-546';
 const SHELL = [
   './',
   './index.html',

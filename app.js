@@ -9,8 +9,8 @@ const exercises = {
         closing: "Dios no te dio un espíritu de temor, sino de poder, amor y dominio propio. Su paz guarda tu corazón en este instante.",
         fases: [
             { dur: 5, texto: "Inhala profundo...", color: "f-verde" },
-            { dur: 5, texto: "Inhala un poco más...", color: "f-cian" },
-            { dur: 5, texto: "Exhala despacio por la boca...", color: "f-violeta" }
+            { dur: 4, texto: "Inhala un poco más...", color: "f-cian" },
+            { dur: 6, texto: "Exhala despacio por la boca...", color: "f-violeta" }
         ],
         svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
