@@ -8,9 +8,9 @@ const exercises = {
         instruction: "Inhala hondo por la nariz en 2 tiempos cortos (sin soltar el aire entre inhalaciones) y exhala muy despacio por la boca en 6 tiempos.",
         closing: "Dios no te dio un espíritu de temor, sino de poder, amor y dominio propio. Su paz guarda tu corazón en este instante.",
         fases: [
-            { dur: 2, texto: "Inhala profundo...", color: "f-verde" },
-            { dur: 1, texto: "Inhala un poco más...", color: "f-cian" },
-            { dur: 5, texto: "Exhala despacio por la boca...", color: "f-violeta" }
+            { dur: 4, texto: "Inhala profundo...", color: "f-verde" },
+            { dur: 3, texto: "Inhala un poco más...", color: "f-cian" },
+            { dur: 8, texto: "Exhala despacio por la boca...", color: "f-violeta" }
         ],
         svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>
@@ -101,9 +101,9 @@ const exercises = {
         instruction: "Coloca tu mano derecha en el centro del pecho ejerciendo una presión suave pero constante. Toma respiraciones profundas sintiendo el calor de tu mano.",
         closing: "Cerca está el Señor de los que tienen el corazón afligido. Estás acompañado y seguro en sus manos.",
         fases: [
-            { dur: 4, texto: "Coloca tu mano en el pecho...", color: "f-cian" },
-            { dur: 4, texto: "Siente tu mano y su calor...", color: "f-calido" },
-            { dur: 4, texto: "Nota tus latidos y respira...", color: "f-verde" }
+            { dur: 8, texto: "Coloca tu mano en el pecho...", color: "f-cian" },
+            { dur: 8, texto: "Siente tu mano y su calor...", color: "f-calido" },
+            { dur: 8, texto: "Nota tus latidos y respira...", color: "f-verde" }
         ],
         svg: `<svg viewBox="0 0 200 240" width="100%" height="100%" aria-hidden="true">
             <defs>

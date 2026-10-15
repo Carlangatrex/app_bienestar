@@ -325,14 +325,14 @@
         .anatomy-breath {
             transform-box: fill-box;
             transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
-            animation: inhaleExhale 8s ease-in-out infinite; -webkit-animation: inhaleExhale 8s ease-in-out infinite;
+            animation: inhaleExhale 15s ease-in-out infinite; -webkit-animation: inhaleExhale 15s ease-in-out infinite;
             filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.55));
         }
 
         .lungs {
             transform-box: fill-box;
             transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
-            animation: lungPulse 8s ease-in-out infinite; -webkit-animation: lungPulse 8s ease-in-out infinite;
+            animation: lungPulse 15s ease-in-out infinite; -webkit-animation: lungPulse 15s ease-in-out infinite;
         }
 
         .lung {
@@ -353,7 +353,7 @@
             fill: url(#coreGrad);
             transform-box: fill-box;
             transform-origin: 50% 50%; -webkit-transform-origin: 50% 50%;
-            animation: corePulse 8s ease-in-out infinite; -webkit-animation: corePulse 8s ease-in-out infinite;
+            animation: corePulse 15s ease-in-out infinite; -webkit-animation: corePulse 15s ease-in-out infinite;
         }
 
         .pulse-wave {
