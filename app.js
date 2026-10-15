@@ -239,6 +239,7 @@ function aplicarFaseGuia() {
         guia.textContent = f.texto;
         guia.className = 'guia-respiracion ' + f.color;
         guia.classList.add('visible'); // fade-in 300ms
+        hablarFase(f.texto); // guía por voz: lee solo cuando cambia la fase
     }, 300);
 }
 
@@ -258,11 +259,59 @@ function stopGuia() {
     clearInterval(guiaTimer);
     guiaTimer = null;
     clearTimeout(guiaSwapTimer);
+    callarVoz();
     const guia = document.getElementById('guia-respiracion');
     if (guia) {
         guia.textContent = '';
         guia.className = 'guia-respiracion';
     }
+}
+
+// ===== Guía por voz (speechSynthesis): lee cada fase si el usuario la activa =====
+const CLAVE_VOZ = 'pausa-breve-voz';
+let vozActiva = false;
+let vozPreferida = null;
+let vozVolumenBase = 1;
+
+function cargarPreferenciaVoz() {
+    try { vozActiva = localStorage.getItem(CLAVE_VOZ) === '1'; } catch (e) { vozActiva = false; }
+    const btn = document.getElementById('btn-voz');
+    if (btn) btn.setAttribute('aria-pressed', vozActiva ? 'true' : 'false');
+    if (!('speechSynthesis' in window) && btn) btn.hidden = true;
+}
+
+function elegirVozEspanola() {
+    if (!('speechSynthesis' in window)) return;
+    const voces = speechSynthesis.getVoices() || [];
+    vozPreferida =
+        voces.find((v) => /^es/i.test(v.lang) && /female|mujer|helena|mónica|monica|paulina|laura|google/i.test(v.name)) ||
+        voces.find((v) => /^es(-|_)/i.test(v.lang)) ||
+        voces.find((v) => /^es/i.test(v.lang)) ||
+        null;
+}
+
+function hablarFase(texto) {
+    if (!vozActiva || !('speechSynthesis' in window)) return;
+    speechSynthesis.cancel(); // corta la frase anterior si aún suena
+    if (bgMusic && !bgMusic.paused) {
+        vozVolumenBase = bgMusic.volume;
+        bgMusic.volume = Math.min(vozVolumenBase, 0.25); // la música baja mientras habla
+    }
+    const u = new SpeechSynthesisUtterance(texto);
+    u.lang = (vozPreferida && vozPreferida.lang) || 'es-ES';
+    if (vozPreferida) u.voice = vozPreferida;
+    u.rate = 0.85; // tono pausado
+    u.onend = u.onerror = restaurarVolumenMusica;
+    speechSynthesis.speak(u);
+}
+
+function restaurarVolumenMusica() {
+    if (bgMusic && !bgMusic.paused) bgMusic.volume = vozVolumenBase;
+}
+
+function callarVoz() {
+    if ('speechSynthesis' in window) speechSynthesis.cancel();
+    restaurarVolumenMusica();
 }
 
 function startTimer() {
@@ -475,6 +524,26 @@ if (audioBtn) {
     });
 }
 
+// Guía por voz: toggle persistente; si se activa con la rutina en curso, lee la fase actual
+if ('speechSynthesis' in window) {
+    elegirVozEspanola();
+    speechSynthesis.addEventListener('voiceschanged', elegirVozEspanola);
+}
+const btnVoz = document.getElementById('btn-voz');
+if (btnVoz) {
+    enlazar(btnVoz, () => {
+        vozActiva = !vozActiva;
+        btnVoz.setAttribute('aria-pressed', vozActiva ? 'true' : 'false');
+        try { localStorage.setItem(CLAVE_VOZ, vozActiva ? '1' : '0'); } catch (e) { /* modo privado */ }
+        if (vozActiva && isRunning) {
+            const guia = document.getElementById('guia-respiracion');
+            if (guia && guia.textContent) hablarFase(guia.textContent);
+        } else if (!vozActiva) {
+            callarVoz();
+        }
+    });
+}
+
 if (bgMusic) {
     bgMusic.addEventListener('error', () => {
         console.warn('No se pudo cargar tu_archivo_relajante.mp3. La app sigue funcionando en silencio.');
@@ -518,3 +587,4 @@ if (hintInicial) hintInicial.style.display = ''; // "Toca la figura para comenza
 const figuraInicial = document.getElementById('figura-svg');
 if (figuraInicial) figuraInicial.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
 renderHistorial(); // muestra el contador de pausas en el inicio
+cargarPreferenciaVoz(); // estado del botón "Guía por voz"

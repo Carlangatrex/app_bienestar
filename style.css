@@ -782,6 +782,12 @@
             font-style: italic;
         }
 
+        .btn-voz[aria-pressed="true"] {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+        }
+
         .nav-btn-secondary {
             background-color: var(--card-bg);
             color: var(--text-main);

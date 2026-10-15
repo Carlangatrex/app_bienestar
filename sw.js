@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v20-session-summary';
+const CACHE_NAME = 'pwa-v21-voice-guide';
 const SHELL = [
   './',
   './index.html',
