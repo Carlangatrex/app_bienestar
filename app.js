@@ -145,7 +145,11 @@ function showScreen(screenId) {
 
 function cargarFigura(data) {
     const cont = document.getElementById('figura-svg');
-    if (cont) cont.innerHTML = data.svg;
+    if (cont) {
+        cont.innerHTML = data.svg;
+        const svg = cont.querySelector('svg');
+        if (svg) svg.setAttribute('aria-hidden', 'true'); // el contenedor ya tiene aria-label
+    }
 }
 
 function selectSymptom(key) {

@@ -204,6 +204,74 @@
             100% { filter: brightness(1); }
         }
 
+        .footer-legal {
+            margin-top: 14px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+            font-size: 0.78rem;
+        }
+
+        .footer-legal a {
+            color: var(--text-sub);
+            text-decoration: none;
+        }
+
+        .footer-legal a:hover,
+        .footer-legal a:focus-visible {
+            color: var(--accent-green);
+        }
+
+        .legal-page {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 24px 18px 40px;
+        }
+
+        .legal-page h1 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            margin-bottom: 4px;
+        }
+
+        .legal-page h2 {
+            font-size: 1.05rem;
+            color: var(--accent-green);
+            margin: 26px 0 8px;
+            scroll-margin-top: 16px;
+        }
+
+        .legal-page p,
+        .legal-page li {
+            font-size: 0.92rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        .legal-page ul {
+            padding-left: 18px;
+            margin: 8px 0;
+        }
+
+        .legal-page li {
+            margin-bottom: 6px;
+        }
+
+        .legal-actualizado {
+            font-size: 0.8rem;
+            color: var(--text-sub);
+            margin-bottom: 8px;
+        }
+
+        .legal-volver {
+            display: inline-block;
+            margin-top: 28px;
+            color: var(--accent-green);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
         .symptom-grid {
             display: flex;
             flex-direction: column;

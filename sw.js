@@ -1,9 +1,10 @@
-const CACHE_NAME = 'pwa-v26-recordatorio';
+const CACHE_NAME = 'pwa-v27-legal';
 const SHELL = [
   './',
   './index.html',
   './style.css',
   './app.js',
+  './legal.html',
   './manifest.json',
   './favicon.ico',
   './icon.svg',
