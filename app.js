@@ -728,6 +728,44 @@ async function desactivarRecordatorio() {
     renderRecordatorio();
 }
 
+// ===== Aceptación de términos en el primer uso (gate legal) =====
+const CLAVE_TERMINOS = 'pausa-breve-terminos';
+const VERSION_TERMINOS = '2026-10-v1';
+
+function terminosAceptados() {
+    try {
+        return localStorage.getItem(CLAVE_TERMINOS) === VERSION_TERMINOS;
+    } catch (e) {
+        return false;
+    }
+}
+
+function inicializarGateTerminos() {
+    const gate = document.getElementById('gate-terminos');
+    if (!gate) return;
+    if (terminosAceptados()) {
+        gate.hidden = true;
+        return;
+    }
+    gate.hidden = false;
+    const check = document.getElementById('gate-check');
+    const btn = document.getElementById('gate-aceptar');
+    if (check && btn) {
+        check.addEventListener('change', () => {
+            btn.disabled = !check.checked;
+        });
+        enlazar(btn, () => {
+            if (!check.checked) return;
+            try {
+                localStorage.setItem(CLAVE_TERMINOS, VERSION_TERMINOS);
+            } catch (e) {
+                console.warn('No se pudo guardar la aceptación de términos:', e);
+            }
+            gate.hidden = true;
+        });
+    }
+}
+
 // ===== Estado inicial: pausado y detenido; nada arranca hasta tocar la figura =====
 isRunning = false;
 clearInterval(timerInterval);
@@ -768,6 +806,7 @@ if (inputRecordatorio) {
     });
 }
 renderRecordatorio();
+inicializarGateTerminos(); // gate legal: solo la primera vez (o si cambia la versión)
 
 // Deep-link desde la notificación: abre directo en el selector de síntomas con un destello
 if (new URLSearchParams(location.search).get('from') === 'notification') {

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v27-legal';
+const CACHE_NAME = 'pwa-v28-eula';
 const SHELL = [
   './',
   './index.html',

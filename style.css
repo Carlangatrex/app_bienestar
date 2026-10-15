@@ -223,6 +223,83 @@
             color: var(--accent-green);
         }
 
+        .disclaimer-home {
+            margin-top: 10px;
+            font-size: 0.72rem;
+            color: var(--text-sub);
+            text-align: center;
+        }
+
+        .gate-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(9, 13, 22, 0.94);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .gate-overlay[hidden] {
+            display: none;
+        }
+
+        .gate-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 24px 20px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .gate-titulo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .gate-texto {
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .gate-texto a {
+            color: var(--accent-green);
+        }
+
+        .gate-check {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .gate-check input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        #gate-aceptar {
+            width: 100%;
+        }
+
+        #gate-aceptar:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
         .legal-page {
             max-width: 640px;
             margin: 0 auto;

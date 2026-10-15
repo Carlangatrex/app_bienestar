@@ -53,6 +53,17 @@ Año: 2026
     <link rel="stylesheet" href="style.css">
 </head>
 <body><div class="app-container">
+    <div id="gate-terminos" class="gate-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="gate-titulo">
+        <div class="gate-card">
+            <p id="gate-titulo" class="gate-titulo">Bienvenida a Pausa Breve</p>
+            <p class="gate-texto">Para usar la app, acepta nuestros <a href="./legal.html#terminos" target="_blank" rel="noopener">Términos y la licencia (EULA)</a> y la <a href="./legal.html#privacidad" target="_blank" rel="noopener">Política de privacidad</a>.</p>
+            <label class="gate-check" for="gate-check">
+                <input type="checkbox" id="gate-check">
+                <span>He leído y acepto los términos y la política de privacidad</span>
+            </label>
+            <button type="button" id="gate-aceptar" class="recordatorio-btn" disabled>Comenzar</button>
+        </div>
+    </div>
     <button type="button" id="audioBtn" aria-label="Control de audio">🔊</button>
     <audio id="bg-music" preload="metadata" loop muted>
         <source src="tu_archivo_relajante.mp3" type="audio/mpeg">
@@ -126,6 +137,7 @@ Año: 2026
             <a href="./legal.html#cookies">Cookies</a>
             <a href="./legal.html#aviso">Aviso</a>
         </footer>
+        <p class="disclaimer-home">Herramienta de bienestar general; no sustituye atención médica o psicológica.</p>
     </section>
 
     <!-- SCREEN 2: PREPARACIÓN Y EJECUCIÓN (TEMPORIZADOR MANUAL) -->
