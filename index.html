@@ -67,6 +67,7 @@ Año: 2026
         <div class="home-title">
             <h2>¿Qué siente tu cuerpo hoy?</h2>
             <p class="subtitulo">Selecciona una opción para empezar</p>
+            <p id="historial-home" class="historial-home" hidden></p>
         </div>
 
         <div class="symptom-grid">
@@ -146,9 +147,11 @@ Año: 2026
             </div>
             <div class="closing-card">
                 <div class="closing-title">Mensaje de Paz</div>
+                <p id="session-summary" class="session-summary"></p>
                 <p id="closing-text" class="closing-message">
                     "Dios no te dio un espíritu de temor, sino de poder, amor y dominio propio. Su paz guarda tu corazón en este instante."
                 </p>
+                <p class="validation-text">Has regalado a tu cuerpo un momento de calma. Respira y sigue.</p>
             </div>
         </div>
 
@@ -162,7 +165,19 @@ Año: 2026
                 </span>
                 Repetir ejercicio
             </button>
-            <button type="button" class="nav-btn-secondary">
+            <button type="button" id="btn-share" class="nav-btn-secondary">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="18" cy="5" r="3"/>
+                        <circle cx="6" cy="12" r="3"/>
+                        <circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+                    </svg>
+                </span>
+                <span id="share-label">Compartir la app</span>
+            </button>
+            <button type="button" id="btn-home" class="nav-btn-secondary">
                 <span class="btn-icon">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>

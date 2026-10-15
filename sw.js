@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v19-ghost-click-fix';
+const CACHE_NAME = 'pwa-v20-session-summary';
 const SHELL = [
   './',
   './index.html',

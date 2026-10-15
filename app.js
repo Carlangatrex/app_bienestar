@@ -288,6 +288,93 @@ function startTimer() {
     }, 1000);
 }
 
+// ===== Historial local de sesiones + resumen de cierre + compartir =====
+const CLAVE_HISTORIAL = 'pausa-breve-historial';
+
+function leerHistorial() {
+    try {
+        const lista = JSON.parse(localStorage.getItem(CLAVE_HISTORIAL));
+        return Array.isArray(lista) ? lista : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function guardarSesion() {
+    if (!currentKey || !exercises[currentKey]) return;
+    try {
+        const lista = leerHistorial();
+        lista.push({
+            k: currentKey,
+            t: exercises[currentKey].title,
+            d: exercises[currentKey].duration,
+            ts: Date.now()
+        });
+        while (lista.length > 30) lista.shift(); // máximo 30 sesiones
+        localStorage.setItem(CLAVE_HISTORIAL, JSON.stringify(lista));
+    } catch (e) {
+        console.warn('No se pudo guardar la sesión en el historial:', e);
+    }
+}
+
+function tiempoRelativo(ts) {
+    const min = Math.round((Date.now() - ts) / 60000);
+    if (min < 1) return 'hace un momento';
+    if (min < 60) return 'hace ' + min + ' min';
+    const h = Math.round(min / 60);
+    if (h < 24) return 'hace ' + h + ' h';
+    const d = Math.round(h / 24);
+    return d <= 1 ? 'ayer' : 'hace ' + d + ' días';
+}
+
+function renderHistorial() {
+    const el = document.getElementById('historial-home');
+    if (!el) return;
+    const lista = leerHistorial();
+    if (!lista.length) {
+        el.hidden = true;
+        el.textContent = '';
+        return;
+    }
+    const semana = lista.filter((x) => Date.now() - x.ts < 7 * 24 * 60 * 60 * 1000).length;
+    const ultima = lista[lista.length - 1];
+    el.hidden = false;
+    el.textContent = semana + (semana === 1 ? ' pausa esta semana' : ' pausas esta semana') + ' · última ' + tiempoRelativo(ultima.ts);
+}
+
+function mostrarResumenSesion() {
+    const resumen = document.getElementById('session-summary');
+    if (!resumen) return;
+    const data = currentKey ? exercises[currentKey] : null;
+    if (!data) { resumen.textContent = ''; return; }
+    const hora = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    resumen.textContent = 'Sesión completada · ' + data.title + ' · ' + formatTime(data.duration) + ' · ' + hora;
+}
+
+function feedbackShare(mensaje) {
+    const label = document.getElementById('share-label');
+    if (!label) return;
+    label.textContent = mensaje;
+    setTimeout(() => { label.textContent = 'Compartir la app'; }, 2200);
+}
+
+function compartirApp() {
+    const datos = {
+        title: 'Pausa Breve - Autorregulación',
+        text: 'Micro-pausas de respiración para autorregularte en menos de un minuto.',
+        url: location.href
+    };
+    if (navigator.share) {
+        navigator.share(datos).catch(() => {}); // el usuario puede cancelar
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(location.href)
+            .then(() => feedbackShare('Enlace copiado'))
+            .catch(() => feedbackShare('No fue posible copiar'));
+    } else {
+        feedbackShare('Copia el enlace de la barra de direcciones');
+    }
+}
+
 function finishExercise() {
     // Ignora un segundo disparo inmediato tras iniciar (clic sintético en móviles)
     if (isRunning && Date.now() - inicioReciente < 700) return;
@@ -296,6 +383,8 @@ function finishExercise() {
     setBreathing(false);
     stopGuia();
     stopMusic();
+    guardarSesion();
+    mostrarResumenSesion();
     showScreen('screen-closing');
 }
 
@@ -313,6 +402,7 @@ function resetToHome() {
     stopGuia();
     stopMusic();
     showScreen('screen-home');
+    renderHistorial();
 }
 
 if ('serviceWorker' in navigator) {
@@ -371,7 +461,8 @@ if (figuraSvg) {
 }
 enlazar(document.getElementById('btn-cancel'), resetToHome);
 enlazar(document.querySelector('#screen-closing .btn-main'), repeatExercise);
-enlazar(document.querySelector('#screen-closing .nav-btn-secondary'), resetToHome);
+enlazar(document.getElementById('btn-home'), resetToHome);
+enlazar(document.getElementById('btn-share'), compartirApp);
 
 // Audio control
 const audioBtn = document.getElementById('audioBtn');
@@ -426,3 +517,4 @@ const hintInicial = document.getElementById('svg-hint');
 if (hintInicial) hintInicial.style.display = ''; // "Toca la figura para comenzar" visible
 const figuraInicial = document.getElementById('figura-svg');
 if (figuraInicial) figuraInicial.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
+renderHistorial(); // muestra el contador de pausas en el inicio
