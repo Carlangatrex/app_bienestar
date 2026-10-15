@@ -109,6 +109,16 @@ Año: 2026
                 <span>Nudo en la garganta o el pecho</span>
             </button>
         </div>
+
+        <div id="recordatorio-card" class="recordatorio-card" hidden>
+            <p class="recordatorio-title">Recordatorio diario</p>
+            <p class="recordatorio-sub">Un aviso tranquilo a la hora que elijas.</p>
+            <div class="recordatorio-row">
+                <input type="time" id="recordatorio-hora" value="07:30" aria-label="Hora del recordatorio">
+                <button type="button" id="btn-recordatorio" class="recordatorio-btn">Activar</button>
+            </div>
+            <p id="recordatorio-estado" class="recordatorio-estado"></p>
+        </div>
     </section>
 
     <!-- SCREEN 2: PREPARACIÓN Y EJECUCIÓN (TEMPORIZADOR MANUAL) -->
@@ -199,7 +209,7 @@ Año: 2026
         </div>
     </section>
 
-    <script src="./app.js?v=10"></script>
+    <script src="./app.js?v=11"></script>
 <!--
 PROYECTO: Pausa Breve - Autorregulación
 CREADO PARA: Lorena

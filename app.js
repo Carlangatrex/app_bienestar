@@ -576,6 +576,152 @@ function stopMusic() {
     }, fadeMs);
 }
 
+// ===== Recordatorio diario (notificación push con la hora que elija cada persona) =====
+const CLAVE_RECORDATORIO = 'pausa-breve-recordatorio';
+const RECORDATORIO_WORKER = 'https://pausa-breve-recordatorio.carlangatrex.workers.dev';
+const RECORDATORIO_VAPID = 'PEGA_AQUI_LLAVE_PUBLICA_VAPID';
+
+function recordatorioSoportado() {
+    return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+}
+
+function urlBase64AUint8Array(base64Url) {
+    const padding = '='.repeat((4 - (base64Url.length % 4)) % 4);
+    const base64 = (base64Url + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const raw = atob(base64);
+    const output = new Uint8Array(raw.length);
+    for (let i = 0; i < raw.length; i++) output[i] = raw.charCodeAt(i);
+    return output;
+}
+
+function leerRecordatorio() {
+    try {
+        const data = JSON.parse(localStorage.getItem(CLAVE_RECORDATORIO));
+        return data && typeof data === 'object' && data.hora ? data : null;
+    } catch (e) {
+        return null;
+    }
+}
+
+function guardarRecordatorio(data) {
+    try {
+        if (data) localStorage.setItem(CLAVE_RECORDATORIO, JSON.stringify(data));
+        else localStorage.removeItem(CLAVE_RECORDATORIO);
+    } catch (e) {
+        console.warn('No se pudo guardar el recordatorio (¿modo privado?):', e);
+    }
+}
+
+function zonaHoraria() {
+    try {
+        return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    } catch (e) {
+        return 'UTC';
+    }
+}
+
+function renderRecordatorio() {
+    const card = document.getElementById('recordatorio-card');
+    if (!card) return;
+    card.hidden = false;
+    const btn = document.getElementById('btn-recordatorio');
+    const input = document.getElementById('recordatorio-hora');
+    const estado = document.getElementById('recordatorio-estado');
+    const guardado = leerRecordatorio();
+    if (!recordatorioSoportado()) {
+        if (input) input.disabled = true;
+        if (btn) btn.hidden = true;
+        if (estado) estado.textContent = 'Tu navegador no admite notificaciones programadas.';
+        return;
+    }
+    if (guardado && input && document.activeElement !== input) input.value = guardado.hora;
+    const permiso = Notification.permission;
+    if (btn) {
+        btn.textContent = guardado ? 'Desactivar' : 'Activar';
+        btn.classList.toggle('recordatorio-on', !!guardado);
+        btn.disabled = permiso === 'denied';
+    }
+    if (estado) {
+        if (permiso === 'denied') {
+            estado.textContent = 'Notificaciones bloqueadas en la configuración del navegador.';
+        } else if (guardado) {
+            estado.textContent = 'Te avisaremos cada día a las ' + guardado.hora + '.';
+        } else {
+            estado.textContent = 'Un aviso tranquilo para hacer una pausa.';
+        }
+    }
+}
+
+async function enviarAlWorker(ruta, cuerpo) {
+    const res = await fetch(RECORDATORIO_WORKER + ruta, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cuerpo)
+    });
+    if (!res.ok) throw new Error('El servidor respondió ' + res.status);
+    return res;
+}
+
+async function probarRecordatorio(sub) {
+    try {
+        await fetch(RECORDATORIO_WORKER + '/test', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ endpoint: sub.endpoint })
+        });
+    } catch (e) {
+        console.warn('No se pudo enviar la notificación de prueba:', e);
+    }
+}
+
+async function activarRecordatorio() {
+    const input = document.getElementById('recordatorio-hora');
+    const estado = document.getElementById('recordatorio-estado');
+    const hora = (input && input.value) || '07:30';
+    if (estado) estado.textContent = 'Preparando...';
+    try {
+        const permiso = await Notification.requestPermission();
+        if (permiso !== 'granted') {
+            renderRecordatorio();
+            return;
+        }
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if (!sub) {
+            sub = await reg.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64AUint8Array(RECORDATORIO_VAPID)
+            });
+        }
+        await enviarAlWorker('/subscribe', {
+            subscription: sub.toJSON(),
+            time: hora,
+            tz: zonaHoraria()
+        });
+        guardarRecordatorio({ hora: hora, tz: zonaHoraria() });
+        renderRecordatorio();
+        probarRecordatorio(sub);
+    } catch (e) {
+        console.warn('No se pudo activar el recordatorio:', e);
+        if (estado) estado.textContent = 'No se pudo activar. Intenta de nuevo.';
+    }
+}
+
+async function desactivarRecordatorio() {
+    try {
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.getSubscription();
+        if (sub) {
+            await enviarAlWorker('/unsubscribe', { endpoint: sub.endpoint });
+            await sub.unsubscribe();
+        }
+    } catch (e) {
+        console.warn('No se pudo avisar al servidor para desactivar:', e);
+    }
+    guardarRecordatorio(null);
+    renderRecordatorio();
+}
+
 // ===== Estado inicial: pausado y detenido; nada arranca hasta tocar la figura =====
 isRunning = false;
 clearInterval(timerInterval);
@@ -588,3 +734,40 @@ const figuraInicial = document.getElementById('figura-svg');
 if (figuraInicial) figuraInicial.setAttribute('aria-label', 'Iniciar ejercicio de respiración');
 renderHistorial(); // muestra el contador de pausas en el inicio
 cargarPreferenciaVoz(); // estado del botón "Guía por voz"
+
+// Recordatorio: estado inicial + botón + cambio de hora
+enlazar(document.getElementById('btn-recordatorio'), () => {
+    if (leerRecordatorio()) desactivarRecordatorio();
+    else activarRecordatorio();
+});
+const inputRecordatorio = document.getElementById('recordatorio-hora');
+if (inputRecordatorio) {
+    inputRecordatorio.addEventListener('change', async () => {
+        const guardado = leerRecordatorio();
+        if (!guardado || !recordatorioSoportado()) return;
+        try {
+            const reg = await navigator.serviceWorker.ready;
+            const sub = await reg.pushManager.getSubscription();
+            if (!sub) return;
+            await enviarAlWorker('/subscribe', {
+                subscription: sub.toJSON(),
+                time: inputRecordatorio.value,
+                tz: zonaHoraria()
+            });
+            guardarRecordatorio({ hora: inputRecordatorio.value, tz: zonaHoraria() });
+            renderRecordatorio();
+        } catch (e) {
+            console.warn('No se pudo actualizar la hora del recordatorio:', e);
+        }
+    });
+}
+renderRecordatorio();
+
+// Deep-link desde la notificación: abre directo en el selector de síntomas con un destello
+if (new URLSearchParams(location.search).get('from') === 'notification') {
+    const cuadricula = document.querySelector('.symptom-grid');
+    if (cuadricula) {
+        cuadricula.classList.add('grid-destello');
+        setTimeout(() => cuadricula.classList.remove('grid-destello'), 1600);
+    }
+}

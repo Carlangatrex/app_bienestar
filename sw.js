@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v25-pecho-547';
+const CACHE_NAME = 'pwa-v26-recordatorio';
 const SHELL = [
   './',
   './index.html',
@@ -52,7 +52,6 @@ function puedeCachear(request, response) {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
-
   // Shell (pantallas/HTML): network-first para que siempre se vea la última versión.
   // Solo cae a la caché si no hay conexión.
   if (isShell(event.request)) {
@@ -86,4 +85,47 @@ self.addEventListener('fetch', (event) => {
       });
     })
   );
+});
+
+// ===== Recordatorio diario: push silencioso del Worker + contenido por fetch =====
+const WORKER_MENSAJE = 'https://pausa-breve-recordatorio.carlangatrex.workers.dev';
+
+self.addEventListener('push', (event) => {
+  event.waitUntil((async () => {
+    let datos = { title: 'Pausa Breve', body: '¿Cómo te sientes hoy?', url: './?from=notification' };
+    try {
+      const sub = await self.registration.pushManager.getSubscription();
+      if (sub) {
+        const res = await fetch(WORKER_MENSAJE + '/message?k=' + encodeURIComponent(sub.endpoint));
+        if (res.ok) datos = Object.assign(datos, await res.json());
+      }
+    } catch (e) {
+      // Sin red: se muestra el mensaje por defecto
+    }
+    await self.registration.showNotification(datos.title, {
+      body: datos.body,
+      icon: './icon-192.png',
+      badge: './icon-192.png',
+      data: { url: datos.url || './?from=notification' },
+      tag: 'pausa-breve-recordatorio'
+    });
+  })());
+});
+
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const url = (event.notification.data && event.notification.data.url) || './?from=notification';
+  event.waitUntil((async () => {
+    const ventanas = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    for (const c of ventanas) {
+      if ('focus' in c) {
+        await c.focus();
+        if ('navigate' in c) {
+          try { await c.navigate(url); } catch (e) { /* Safari puede rechazar navigate */ }
+        }
+        return;
+      }
+    }
+    await clients.openWindow(url);
+  })());
 });

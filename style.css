@@ -115,6 +115,95 @@
             color: var(--accent-green);
         }
 
+        .recordatorio-card {
+            margin-top: 16px;
+            padding: 14px 16px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .recordatorio-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2px;
+        }
+
+        .recordatorio-sub {
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            margin-bottom: 10px;
+        }
+
+        .recordatorio-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .recordatorio-row input[type="time"] {
+            flex: 1;
+            min-width: 0;
+            background-color: #131c2e;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-main);
+            font-family: var(--font-family);
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 10px;
+            min-height: 48px;
+        }
+
+        .recordatorio-btn {
+            background-color: var(--primary);
+            border: none;
+            border-radius: 12px;
+            color: #041016;
+            font-family: var(--font-family);
+            font-size: 0.95rem;
+            font-weight: 700;
+            padding: 12px 18px;
+            min-height: 48px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .recordatorio-btn:active {
+            transform: scale(0.98); -webkit-transform: scale(0.98);
+        }
+
+        .recordatorio-btn.recordatorio-on {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-sub);
+        }
+
+        .recordatorio-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .recordatorio-estado {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-sub);
+        }
+
+        .symptom-grid.grid-destello {
+            animation: gridDestello 1.6s ease;
+        }
+
+        @keyframes gridDestello {
+            0%   { filter: brightness(1); }
+            25%  { filter: brightness(1.35); }
+            100% { filter: brightness(1); }
+        }
+
         .symptom-grid {
             display: flex;
             flex-direction: column;
@@ -693,6 +782,9 @@
             .symptom-btn .icon { width: 40px; height: 40px; border-radius: 12px; }
             .symptom-btn .icon svg { width: 21px; height: 21px; }
             .symptom-grid { gap: 10px; margin-bottom: 2px; }
+            .recordatorio-card { margin-top: 12px; padding: 12px 14px; }
+            .recordatorio-row input[type="time"] { font-size: 0.95rem; min-height: 44px; }
+            .recordatorio-btn { font-size: 0.9rem; min-height: 44px; padding: 10px 16px; }
             .instruction-box { padding: 16px 16px; }
             .instruction-text { font-size: 1.1rem; }
             .exercise-container { gap: 16px; }

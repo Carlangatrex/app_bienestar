@@ -1,0 +1,15 @@
+name = "pausa-breve-recordatorio"
+main = "index.js"
+compatibility_date = "2025-09-01"
+
+[vars]
+APP_URL = "https://carlangatrex.github.io/app_bienestar/"
+ALLOWED_ORIGINS = "https://carlangatrex.github.io,http://localhost:8080"
+VAPID_EMAIL = "admin@example.com"
+
+[[kv_namespaces]]
+binding = "REMINDERS"
+id = "PEGA_AQUI_EL_ID_DE_KV"
+
+[triggers]
+crons = ["*/15 * * * *"]
