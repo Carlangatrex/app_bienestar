@@ -9,7 +9,7 @@ VAPID_EMAIL = "admin@example.com"
 
 [[kv_namespaces]]
 binding = "REMINDERS"
-id = "PEGA_AQUI_EL_ID_DE_KV"
+id = "7cf6385a2a2a46e598222849bacb870e"
 
 [triggers]
 crons = ["*/15 * * * *"]

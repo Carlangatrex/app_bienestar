@@ -579,7 +579,7 @@ function stopMusic() {
 // ===== Recordatorio diario (notificación push con la hora que elija cada persona) =====
 const CLAVE_RECORDATORIO = 'pausa-breve-recordatorio';
 const RECORDATORIO_WORKER = 'https://pausa-breve-recordatorio.carlangatrex.workers.dev';
-const RECORDATORIO_VAPID = 'PEGA_AQUI_LLAVE_PUBLICA_VAPID';
+const RECORDATORIO_VAPID = 'MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAELRyxSAeBDKpoT4flDeRSutNzpWuDHWV071JSkeg39Tfp6ntxB8Vnd31uRGfEouE6tegm1haTuLy78gm0uVWNhg';
 
 function recordatorioSoportado() {
     return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
