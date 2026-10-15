@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pwa-v22-calm-phases';
+const CACHE_NAME = 'pwa-v23-pecho-555';
 const SHELL = [
   './',
   './index.html',
