@@ -591,6 +591,8 @@ function urlBase64AUint8Array(base64Url) {
     const raw = atob(base64);
     const output = new Uint8Array(raw.length);
     for (let i = 0; i < raw.length; i++) output[i] = raw.charCodeAt(i);
+    // Chrome/Android exigen la llave como punto EC crudo de 65 bytes (sin cabecera DER)
+    if (output.length > 65) return output.slice(output.length - 65);
     return output;
 }
 
